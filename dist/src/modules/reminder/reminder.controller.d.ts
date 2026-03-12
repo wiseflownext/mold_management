@@ -20,13 +20,5 @@ export declare class ReminderController {
         warningPercent: number;
         overduePercent: number;
     }>;
-    getAlerts(): Promise<{
-        moldId: number;
-        moldNumber: string;
-        type: string;
-        sinceLastMaint: number;
-        maintenanceCycle: number;
-        ratio: number;
-        level: string;
-    }[]>;
+    getAlerts(): Promise<any[]>;
 }

@@ -4,11 +4,14 @@ export declare class UsageRecordService {
     private prisma;
     constructor(prisma: PrismaService);
     create(dto: CreateUsageRecordDto, operatorId: number): Promise<{
+        mold: {
+            workshop: {
+                name: string;
+            } | null;
+            moldNumber: string;
+        };
         operator: {
             name: string;
-        };
-        mold: {
-            moldNumber: string;
         };
     } & {
         id: number;
@@ -17,17 +20,20 @@ export declare class UsageRecordService {
         recordDate: Date;
         operatorId: number;
         shift: import(".prisma/client").$Enums.Shift;
-        product: string;
         quantity: number;
+        product: string;
         note: string | null;
     }>;
     findAll(query: QueryUsageRecordDto): Promise<{
         list: ({
+            mold: {
+                workshop: {
+                    name: string;
+                } | null;
+                moldNumber: string;
+            };
             operator: {
                 name: string;
-            };
-            mold: {
-                moldNumber: string;
             };
         } & {
             id: number;
@@ -36,8 +42,8 @@ export declare class UsageRecordService {
             recordDate: Date;
             operatorId: number;
             shift: import(".prisma/client").$Enums.Shift;
-            product: string;
             quantity: number;
+            product: string;
             note: string | null;
         })[];
         total: number;

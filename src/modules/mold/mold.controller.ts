@@ -27,6 +27,11 @@ export class MoldController {
     return this.moldService.getStatistics();
   }
 
+  @Get('today-summary')
+  getTodaySummary() {
+    return this.moldService.getTodaySummary();
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.moldService.findOne(id);
@@ -52,5 +57,17 @@ export class MoldController {
   @Roles('admin')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.moldService.remove(id);
+  }
+
+  @Post(':id/products')
+  @Roles('admin')
+  addProduct(@Param('id', ParseIntPipe) id: number, @Body() data: any) {
+    return this.moldService.addProduct(id, data);
+  }
+
+  @Delete('products/:productId')
+  @Roles('admin')
+  removeProduct(@Param('productId', ParseIntPipe) productId: number) {
+    return this.moldService.removeProduct(productId);
   }
 }

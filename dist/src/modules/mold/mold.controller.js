@@ -33,6 +33,9 @@ let MoldController = class MoldController {
     getStatistics() {
         return this.moldService.getStatistics();
     }
+    getTodaySummary() {
+        return this.moldService.getTodaySummary();
+    }
     findOne(id) {
         return this.moldService.findOne(id);
     }
@@ -44,6 +47,12 @@ let MoldController = class MoldController {
     }
     remove(id) {
         return this.moldService.remove(id);
+    }
+    addProduct(id, data) {
+        return this.moldService.addProduct(id, data);
+    }
+    removeProduct(productId) {
+        return this.moldService.removeProduct(productId);
     }
 };
 exports.MoldController = MoldController;
@@ -68,6 +77,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], MoldController.prototype, "getStatistics", null);
+__decorate([
+    (0, common_1.Get)('today-summary'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], MoldController.prototype, "getTodaySummary", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
@@ -102,6 +117,23 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], MoldController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Post)(':id/products'),
+    (0, roles_decorator_1.Roles)('admin'),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], MoldController.prototype, "addProduct", null);
+__decorate([
+    (0, common_1.Delete)('products/:productId'),
+    (0, roles_decorator_1.Roles)('admin'),
+    __param(0, (0, common_1.Param)('productId', common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], MoldController.prototype, "removeProduct", null);
 exports.MoldController = MoldController = __decorate([
     (0, common_1.Controller)('molds'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),

@@ -7,9 +7,9 @@ export declare class MoldController {
         workshop: {
             id: number;
             name: string;
-            isDefault: boolean;
             createdAt: Date;
             updatedAt: Date;
+            isDefault: boolean;
         } | null;
         products: {
             id: number;
@@ -22,9 +22,9 @@ export declare class MoldController {
         }[];
     } & {
         id: number;
+        workshopId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        workshopId: number | null;
         moldNumber: string;
         type: import(".prisma/client").$Enums.MoldType;
         firstUseDate: Date | null;
@@ -38,9 +38,9 @@ export declare class MoldController {
             workshop: {
                 id: number;
                 name: string;
-                isDefault: boolean;
                 createdAt: Date;
                 updatedAt: Date;
+                isDefault: boolean;
             } | null;
             products: {
                 id: number;
@@ -53,9 +53,9 @@ export declare class MoldController {
             }[];
         } & {
             id: number;
+            workshopId: number | null;
             createdAt: Date;
             updatedAt: Date;
-            workshopId: number | null;
             moldNumber: string;
             type: import(".prisma/client").$Enums.MoldType;
             firstUseDate: Date | null;
@@ -77,13 +77,18 @@ export declare class MoldController {
             _count: number;
         })[];
     }>;
+    getTodaySummary(): Promise<{
+        recordCount: number;
+        totalProduction: number;
+        activeMolds: number;
+    }>;
     findOne(id: number): Promise<{
         workshop: {
             id: number;
             name: string;
-            isDefault: boolean;
             createdAt: Date;
             updatedAt: Date;
+            isDefault: boolean;
         } | null;
         usageRecords: ({
             operator: {
@@ -96,8 +101,8 @@ export declare class MoldController {
             recordDate: Date;
             operatorId: number;
             shift: import(".prisma/client").$Enums.Shift;
-            product: string;
             quantity: number;
+            product: string;
             note: string | null;
         })[];
         maintenanceRecords: ({
@@ -137,9 +142,9 @@ export declare class MoldController {
         }[];
     } & {
         id: number;
+        workshopId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        workshopId: number | null;
         moldNumber: string;
         type: import(".prisma/client").$Enums.MoldType;
         firstUseDate: Date | null;
@@ -152,9 +157,9 @@ export declare class MoldController {
         workshop: {
             id: number;
             name: string;
-            isDefault: boolean;
             createdAt: Date;
             updatedAt: Date;
+            isDefault: boolean;
         } | null;
         products: {
             id: number;
@@ -167,9 +172,9 @@ export declare class MoldController {
         }[];
     } & {
         id: number;
+        workshopId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        workshopId: number | null;
         moldNumber: string;
         type: import(".prisma/client").$Enums.MoldType;
         firstUseDate: Date | null;
@@ -180,9 +185,9 @@ export declare class MoldController {
     }>;
     updateDesignLife(id: number, dto: UpdateDesignLifeDto, userId: number): Promise<{
         id: number;
+        workshopId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        workshopId: number | null;
         moldNumber: string;
         type: import(".prisma/client").$Enums.MoldType;
         firstUseDate: Date | null;
@@ -193,9 +198,9 @@ export declare class MoldController {
     }>;
     remove(id: number): Promise<{
         id: number;
+        workshopId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        workshopId: number | null;
         moldNumber: string;
         type: import(".prisma/client").$Enums.MoldType;
         firstUseDate: Date | null;
@@ -203,5 +208,23 @@ export declare class MoldController {
         maintenanceCycle: number;
         status: import(".prisma/client").$Enums.MoldStatus;
         usageCount: number;
+    }>;
+    addProduct(id: number, data: any): Promise<{
+        id: number;
+        name: string;
+        createdAt: Date;
+        customer: string | null;
+        model: string | null;
+        partNumber: string | null;
+        moldId: number;
+    }>;
+    removeProduct(productId: number): Promise<{
+        id: number;
+        name: string;
+        createdAt: Date;
+        customer: string | null;
+        model: string | null;
+        partNumber: string | null;
+        moldId: number;
     }>;
 }

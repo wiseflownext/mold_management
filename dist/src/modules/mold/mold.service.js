@@ -38,8 +38,13 @@ let MoldService = class MoldService {
     async findAll(query) {
         const { keyword, status, type, workshopId, page = 1, pageSize = 20 } = query;
         const where = {};
-        if (keyword)
-            where.moldNumber = { contains: keyword };
+        if (keyword) {
+            where.OR = [
+                { moldNumber: { contains: keyword } },
+                { products: { some: { name: { contains: keyword } } } },
+                { products: { some: { customer: { contains: keyword } } } },
+            ];
+        }
         if (status)
             where.status = status;
         if (type)
@@ -111,6 +116,33 @@ let MoldService = class MoldService {
             this.prisma.mold.groupBy({ by: ['type'], _count: true }),
         ]);
         return { total, byStatus, byType };
+    }
+    async getTodaySummary() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const [recordCount, totalProduction, activeMolds] = await Promise.all([
+            this.prisma.usageRecord.count({ where: { recordDate: { gte: today, lt: tomorrow } } }),
+            this.prisma.usageRecord.aggregate({ where: { recordDate: { gte: today, lt: tomorrow } }, _sum: { quantity: true } }),
+            this.prisma.usageRecord.findMany({
+                where: { recordDate: { gte: today, lt: tomorrow } },
+                select: { moldId: true },
+                distinct: ['moldId'],
+            }),
+        ]);
+        return {
+            recordCount,
+            totalProduction: totalProduction._sum.quantity || 0,
+            activeMolds: activeMolds.length,
+        };
+    }
+    async addProduct(moldId, data) {
+        await this.findOne(moldId);
+        return this.prisma.moldProduct.create({ data: { moldId, ...data } });
+    }
+    async removeProduct(productId) {
+        return this.prisma.moldProduct.delete({ where: { id: productId } });
     }
 };
 exports.MoldService = MoldService;

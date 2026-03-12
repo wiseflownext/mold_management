@@ -74,26 +74,56 @@ let ReminderService = class ReminderService {
     }
     async getMaintenanceAlerts() {
         const molds = await this.prisma.mold.findMany({
-            where: { status: 'IN_USE' },
-            select: { id: true, moldNumber: true, type: true, usageCount: true, maintenanceCycle: true, designLife: true },
+            where: { status: { in: ['IN_USE', 'REPAIRING'] } },
+            include: {
+                workshop: { select: { name: true } },
+                products: { select: { name: true, customer: true }, take: 1 },
+            },
         });
-        const alerts = [];
+        const results = [];
         for (const mold of molds) {
             const sinceLastMaint = await this.getUsageSinceLastMaintenance(mold.id);
+            const remaining = mold.maintenanceCycle - sinceLastMaint;
             const ratio = (sinceLastMaint / mold.maintenanceCycle) * 100;
-            if (ratio >= 80) {
-                alerts.push({
-                    moldId: mold.id,
-                    moldNumber: mold.moldNumber,
-                    type: mold.type,
-                    sinceLastMaint,
-                    maintenanceCycle: mold.maintenanceCycle,
-                    ratio: Math.round(ratio),
-                    level: ratio >= 100 ? 'overdue' : 'warning',
-                });
-            }
+            const lastMaint = await this.prisma.maintenanceRecord.findFirst({
+                where: { moldId: mold.id, type: 'MAINTAIN' },
+                orderBy: { recordDate: 'desc' },
+                select: { recordDate: true },
+            });
+            let urgencyLevel;
+            if (remaining <= 0)
+                urgencyLevel = 'overdue';
+            else if (remaining <= 200)
+                urgencyLevel = 'critical';
+            else if (remaining <= 500)
+                urgencyLevel = 'warning';
+            else
+                urgencyLevel = 'normal';
+            if (urgencyLevel === 'normal' && ratio < 60)
+                continue;
+            results.push({
+                moldId: mold.id,
+                moldNumber: mold.moldNumber,
+                workshop: mold.workshop?.name || '',
+                type: mold.type,
+                status: mold.status,
+                productName: mold.products[0]?.name || '',
+                customer: mold.products[0]?.customer || '',
+                maintenanceCycle: mold.maintenanceCycle,
+                usageCount: mold.usageCount,
+                designLife: mold.designLife,
+                sinceLastMaint,
+                remainingUses: remaining,
+                isOverdue: remaining <= 0,
+                urgencyLevel,
+                lastMaintenanceDate: lastMaint?.recordDate?.toISOString().slice(0, 10) || null,
+            });
         }
-        return alerts;
+        results.sort((a, b) => {
+            const order = { overdue: 0, critical: 1, warning: 2, normal: 3 };
+            return (order[a.urgencyLevel] ?? 9) - (order[b.urgencyLevel] ?? 9);
+        });
+        return results;
     }
 };
 exports.ReminderService = ReminderService;

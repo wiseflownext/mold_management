@@ -4,11 +4,11 @@ export declare class MaintenanceRecordController {
     private service;
     constructor(service: MaintenanceRecordService);
     create(dto: CreateMaintenanceRecordDto, userId: number): Promise<{
-        operator: {
-            name: string;
-        };
         mold: {
             moldNumber: string;
+        };
+        operator: {
+            name: string;
         };
     } & {
         id: number;
@@ -21,11 +21,11 @@ export declare class MaintenanceRecordController {
     }>;
     findAll(query: QueryMaintenanceRecordDto): Promise<{
         list: ({
-            operator: {
-                name: string;
-            };
             mold: {
                 moldNumber: string;
+            };
+            operator: {
+                name: string;
             };
         } & {
             id: number;

@@ -7,9 +7,9 @@ export declare class MoldService {
         workshop: {
             id: number;
             name: string;
-            isDefault: boolean;
             createdAt: Date;
             updatedAt: Date;
+            isDefault: boolean;
         } | null;
         products: {
             id: number;
@@ -22,9 +22,9 @@ export declare class MoldService {
         }[];
     } & {
         id: number;
+        workshopId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        workshopId: number | null;
         moldNumber: string;
         type: import(".prisma/client").$Enums.MoldType;
         firstUseDate: Date | null;
@@ -38,9 +38,9 @@ export declare class MoldService {
             workshop: {
                 id: number;
                 name: string;
-                isDefault: boolean;
                 createdAt: Date;
                 updatedAt: Date;
+                isDefault: boolean;
             } | null;
             products: {
                 id: number;
@@ -53,9 +53,9 @@ export declare class MoldService {
             }[];
         } & {
             id: number;
+            workshopId: number | null;
             createdAt: Date;
             updatedAt: Date;
-            workshopId: number | null;
             moldNumber: string;
             type: import(".prisma/client").$Enums.MoldType;
             firstUseDate: Date | null;
@@ -72,9 +72,9 @@ export declare class MoldService {
         workshop: {
             id: number;
             name: string;
-            isDefault: boolean;
             createdAt: Date;
             updatedAt: Date;
+            isDefault: boolean;
         } | null;
         usageRecords: ({
             operator: {
@@ -87,8 +87,8 @@ export declare class MoldService {
             recordDate: Date;
             operatorId: number;
             shift: import(".prisma/client").$Enums.Shift;
-            product: string;
             quantity: number;
+            product: string;
             note: string | null;
         })[];
         maintenanceRecords: ({
@@ -128,9 +128,9 @@ export declare class MoldService {
         }[];
     } & {
         id: number;
+        workshopId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        workshopId: number | null;
         moldNumber: string;
         type: import(".prisma/client").$Enums.MoldType;
         firstUseDate: Date | null;
@@ -143,9 +143,9 @@ export declare class MoldService {
         workshop: {
             id: number;
             name: string;
-            isDefault: boolean;
             createdAt: Date;
             updatedAt: Date;
+            isDefault: boolean;
         } | null;
         products: {
             id: number;
@@ -158,9 +158,9 @@ export declare class MoldService {
         }[];
     } & {
         id: number;
+        workshopId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        workshopId: number | null;
         moldNumber: string;
         type: import(".prisma/client").$Enums.MoldType;
         firstUseDate: Date | null;
@@ -171,9 +171,9 @@ export declare class MoldService {
     }>;
     updateDesignLife(id: number, dto: UpdateDesignLifeDto, userId: number): Promise<{
         id: number;
+        workshopId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        workshopId: number | null;
         moldNumber: string;
         type: import(".prisma/client").$Enums.MoldType;
         firstUseDate: Date | null;
@@ -184,9 +184,9 @@ export declare class MoldService {
     }>;
     remove(id: number): Promise<{
         id: number;
+        workshopId: number | null;
         createdAt: Date;
         updatedAt: Date;
-        workshopId: number | null;
         moldNumber: string;
         type: import(".prisma/client").$Enums.MoldType;
         firstUseDate: Date | null;
@@ -203,5 +203,33 @@ export declare class MoldService {
         byType: (import(".prisma/client").Prisma.PickEnumerable<import(".prisma/client").Prisma.MoldGroupByOutputType, "type"[]> & {
             _count: number;
         })[];
+    }>;
+    getTodaySummary(): Promise<{
+        recordCount: number;
+        totalProduction: number;
+        activeMolds: number;
+    }>;
+    addProduct(moldId: number, data: {
+        customer?: string;
+        model?: string;
+        name: string;
+        partNumber?: string;
+    }): Promise<{
+        id: number;
+        name: string;
+        createdAt: Date;
+        customer: string | null;
+        model: string | null;
+        partNumber: string | null;
+        moldId: number;
+    }>;
+    removeProduct(productId: number): Promise<{
+        id: number;
+        name: string;
+        createdAt: Date;
+        customer: string | null;
+        model: string | null;
+        partNumber: string | null;
+        moldId: number;
     }>;
 }

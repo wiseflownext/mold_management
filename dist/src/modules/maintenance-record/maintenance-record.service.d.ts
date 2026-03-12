@@ -4,11 +4,11 @@ export declare class MaintenanceRecordService {
     private prisma;
     constructor(prisma: PrismaService);
     create(dto: CreateMaintenanceRecordDto, operatorId: number): Promise<{
-        operator: {
-            name: string;
-        };
         mold: {
             moldNumber: string;
+        };
+        operator: {
+            name: string;
         };
     } & {
         id: number;
@@ -21,11 +21,11 @@ export declare class MaintenanceRecordService {
     }>;
     findAll(query: QueryMaintenanceRecordDto): Promise<{
         list: ({
-            operator: {
-                name: string;
-            };
             mold: {
                 moldNumber: string;
+            };
+            operator: {
+                name: string;
             };
         } & {
             id: number;

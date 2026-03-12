@@ -29,7 +29,13 @@ export class MoldService {
   async findAll(query: QueryMoldDto) {
     const { keyword, status, type, workshopId, page = 1, pageSize = 20 } = query;
     const where: any = {};
-    if (keyword) where.moldNumber = { contains: keyword };
+    if (keyword) {
+      where.OR = [
+        { moldNumber: { contains: keyword } },
+        { products: { some: { name: { contains: keyword } } } },
+        { products: { some: { customer: { contains: keyword } } } },
+      ];
+    }
     if (status) where.status = status;
     if (type) where.type = type;
     if (workshopId) where.workshopId = workshopId;
@@ -104,5 +110,37 @@ export class MoldService {
       this.prisma.mold.groupBy({ by: ['type'], _count: true }),
     ]);
     return { total, byStatus, byType };
+  }
+
+  async getTodaySummary() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const [recordCount, totalProduction, activeMolds] = await Promise.all([
+      this.prisma.usageRecord.count({ where: { recordDate: { gte: today, lt: tomorrow } } }),
+      this.prisma.usageRecord.aggregate({ where: { recordDate: { gte: today, lt: tomorrow } }, _sum: { quantity: true } }),
+      this.prisma.usageRecord.findMany({
+        where: { recordDate: { gte: today, lt: tomorrow } },
+        select: { moldId: true },
+        distinct: ['moldId'],
+      }),
+    ]);
+
+    return {
+      recordCount,
+      totalProduction: totalProduction._sum.quantity || 0,
+      activeMolds: activeMolds.length,
+    };
+  }
+
+  async addProduct(moldId: number, data: { customer?: string; model?: string; name: string; partNumber?: string }) {
+    await this.findOne(moldId);
+    return this.prisma.moldProduct.create({ data: { moldId, ...data } });
+  }
+
+  async removeProduct(productId: number) {
+    return this.prisma.moldProduct.delete({ where: { id: productId } });
   }
 }

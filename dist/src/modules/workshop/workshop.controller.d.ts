@@ -5,29 +5,29 @@ export declare class WorkshopController {
     create(name: string): Promise<{
         id: number;
         name: string;
-        isDefault: boolean;
         createdAt: Date;
         updatedAt: Date;
+        isDefault: boolean;
     }>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<{
         id: number;
         name: string;
-        isDefault: boolean;
         createdAt: Date;
         updatedAt: Date;
+        isDefault: boolean;
     }[]>;
     update(id: number, name: string): Promise<{
         id: number;
         name: string;
-        isDefault: boolean;
         createdAt: Date;
         updatedAt: Date;
+        isDefault: boolean;
     }>;
     remove(id: number): Promise<{
         id: number;
         name: string;
-        isDefault: boolean;
         createdAt: Date;
         updatedAt: Date;
+        isDefault: boolean;
     }>;
 }

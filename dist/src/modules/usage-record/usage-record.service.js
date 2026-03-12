@@ -31,7 +31,7 @@ let UsageRecordService = class UsageRecordService {
                     operatorId,
                     note: dto.note,
                 },
-                include: { mold: { select: { moldNumber: true } }, operator: { select: { name: true } } },
+                include: { mold: { select: { moldNumber: true, workshop: { select: { name: true } } } }, operator: { select: { name: true } } },
             }),
             this.prisma.mold.update({
                 where: { id: dto.moldId },
@@ -60,7 +60,7 @@ let UsageRecordService = class UsageRecordService {
         const [list, total] = await Promise.all([
             this.prisma.usageRecord.findMany({
                 where,
-                include: { mold: { select: { moldNumber: true } }, operator: { select: { name: true } } },
+                include: { mold: { select: { moldNumber: true, workshop: { select: { name: true } } } }, operator: { select: { name: true } } },
                 orderBy: { recordDate: 'desc' },
                 skip: (page - 1) * pageSize,
                 take: pageSize,
