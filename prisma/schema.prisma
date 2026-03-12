@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(50)
+  name      String   @db.VarChar(50)
+  phone     String?  @unique @db.VarChar(20)
+  password  String   @db.VarChar(255)
+  role      UserRole @default(operator)
+  workshopId Int?    @map("workshop_id")
+  workshop  Workshop? @relation(fields: [workshopId], references: [id], onDelete: SetNull)
+  lastLogin DateTime? @map("last_login")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  usageRecords      UsageRecord[]
+  maintenanceRecords MaintenanceRecord[]
+  certificationLogs CertificationLog[]
+  notifications     Notification[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  admin
+  operator
+}
+
+model Workshop {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(50)
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  users User[]
+  molds Mold[]
+
+  @@map("workshops")
+}
+
+model Mold {
+  id               Int        @id @default(autoincrement())
+  moldNumber       String     @unique @map("mold_number") @db.VarChar(50)
+  type             MoldType
+  workshopId       Int?       @map("workshop_id")
+  workshop         Workshop?  @relation(fields: [workshopId], references: [id], onDelete: SetNull)
+  firstUseDate     DateTime?  @map("first_use_date") @db.Date
+  designLife       Int        @map("design_life")
+  maintenanceCycle Int        @map("maintenance_cycle")
+  usageCount       Int        @default(0) @map("usage_count")
+  status           MoldStatus @default(IN_USE)
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+
+  products           MoldProduct[]
+  usageRecords       UsageRecord[]
+  maintenanceRecords MaintenanceRecord[]
+  certificationLogs  CertificationLog[]
+  notifications      Notification[]
+
+  @@index([status])
+  @@index([type])
+  @@map("molds")
+}
+
+enum MoldType {
+  COMPRESSION @map("模压模具")
+  EXTRUSION   @map("口型模具")
+  CORNER      @map("接角模具")
+}
+
+enum MoldStatus {
+  IN_USE     @map("在用")
+  REPAIRING  @map("维修中")
+  STOPPED    @map("停用")
+  SCRAPPED   @map("报废")
+}
+
+model MoldProduct {
+  id         Int     @id @default(autoincrement())
+  moldId     Int     @map("mold_id")
+  mold       Mold    @relation(fields: [moldId], references: [id], onDelete: Cascade)
+  customer   String? @db.VarChar(100)
+  model      String? @db.VarChar(50)
+  name       String  @db.VarChar(200)
+  partNumber String? @map("part_number") @db.VarChar(50)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([moldId])
+  @@map("mold_products")
+}
+
+model UsageRecord {
+  id         Int      @id @default(autoincrement())
+  moldId     Int      @map("mold_id")
+  mold       Mold     @relation(fields: [moldId], references: [id], onDelete: Cascade)
+  product    String   @db.VarChar(200)
+  quantity   Int
+  shift      Shift
+  recordDate DateTime @map("record_date") @db.Date
+  operatorId Int      @map("operator_id")
+  operator   User     @relation(fields: [operatorId], references: [id])
+  note       String?  @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([moldId])
+  @@index([operatorId])
+  @@index([recordDate])
+  @@map("usage_records")
+}
+
+enum Shift {
+  MORNING   @map("早班")
+  AFTERNOON @map("中班")
+  NIGHT     @map("晚班")
+}
+
+model MaintenanceRecord {
+  id         Int             @id @default(autoincrement())
+  moldId     Int             @map("mold_id")
+  mold       Mold            @relation(fields: [moldId], references: [id], onDelete: Cascade)
+  type       MaintenanceType
+  content    String          @db.Text
+  recordDate DateTime        @map("record_date") @db.Date
+  operatorId Int             @map("operator_id")
+  operator   User            @relation(fields: [operatorId], references: [id])
+  createdAt  DateTime        @default(now()) @map("created_at")
+
+  @@index([moldId])
+  @@index([recordDate])
+  @@map("maintenance_records")
+}
+
+enum MaintenanceType {
+  MAINTAIN @map("保养")
+  REPAIR   @map("维修")
+}
+
+model CertificationLog {
+  id             Int    @id @default(autoincrement())
+  moldId         Int    @map("mold_id")
+  mold           Mold   @relation(fields: [moldId], references: [id], onDelete: Cascade)
+  oldDesignLife  Int    @map("old_design_life")
+  newDesignLife  Int    @map("new_design_life")
+  reportUrl      String @map("report_url") @db.VarChar(500)
+  operatorId     Int    @map("operator_id")
+  operator       User   @relation(fields: [operatorId], references: [id])
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("certification_logs")
+}
+
+model Notification {
+  id        Int              @id @default(autoincrement())
+  userId    Int              @map("user_id")
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String           @db.VarChar(100)
+  message   String           @db.VarChar(500)
+  moldId    Int?             @map("mold_id")
+  mold      Mold?            @relation(fields: [moldId], references: [id], onDelete: SetNull)
+  isRead    Boolean          @default(false) @map("is_read")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  MAINTENANCE_OVERDUE @map("maintenance_overdue")
+  MAINTENANCE_SOON    @map("maintenance_soon")
+  STATUS_CHANGE       @map("status_change")
+  USAGE_RECORD        @map("usage_record")
+}
+
+model ReminderSetting {
+  id                  Int      @id @default(autoincrement())
+  moldType            MoldType @unique @map("mold_type")
+  enabled             Boolean  @default(true)
+  remainingThreshold  Int      @default(300) @map("remaining_threshold")
+  warningPercent      Int      @default(80) @map("warning_percent")
+  overduePercent      Int      @default(100) @map("overdue_percent")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("reminder_settings")
+}
