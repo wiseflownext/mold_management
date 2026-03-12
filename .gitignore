@@ -1,0 +1,9 @@
+阿里云.txt
+*.zip
+node_modules/
+__pycache__/
+.env
+.env.*
+*.pyc
+.DS_Store
+Thumbs.db
