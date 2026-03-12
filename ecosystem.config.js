@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: 'mold-api',
-    script: 'dist/main.js',
+    script: 'dist/src/main.js',
     instances: 2,
     exec_mode: 'cluster',
     env: {
