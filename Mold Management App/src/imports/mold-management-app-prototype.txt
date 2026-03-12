@@ -1,0 +1,112 @@
+# Figma Prompt - 模具管理 App
+
+Design a mobile app prototype for an industrial mold management system (模具管理). The app is used by factory workshop workers and managers to track mold usage records and maintenance. Chinese UI language throughout.
+
+## Design Style
+
+- Clean industrial style, professional and efficient
+- Primary color: #1A73E8 (blue), accent: #FF6D00 (orange for warnings/alerts)
+- Background: #F5F7FA, cards: white with subtle shadow
+- Font: system default, clear hierarchy
+- Status colors: green (在用/in-use), orange (维修中/repairing), gray (停用/stopped), red (报废/scrapped)
+- Bottom tab navigation: 首页 / 模具 / 新增记录 / 我的
+- iPhone 15 Pro frame (393×852)
+
+## Screens to Design (7 screens)
+
+### Screen 1: 登录页 (Login)
+- App logo at top center, app name "模具管理" below
+- Phone number input field
+- Password input field
+- Login button (primary blue, full width)
+- Clean minimal layout, no registration
+
+### Screen 2: 首页 (Home)
+- Top: greeting "你好，张工" with role badge "管理人员"
+- Stats row: 4 colored cards in a 2×2 grid showing mold counts by status:
+  - 在用 68 (green)
+  - 维修中 3 (orange)
+  - 停用 4 (gray)
+  - 报废 1 (red)
+- Section "维保提醒" with orange alert icon, showing 2-3 reminder cards:
+  - Each card: mold number, product name, "距下次保养还剩 XX 次"
+  - Overdue items highlighted in red text
+- Section "快捷操作": two large buttons side by side
+  - "新增使用记录" (blue outline)
+  - "搜索模具" (gray outline)
+
+### Screen 3: 模具列表 (Mold List)
+- Top: search bar with placeholder "搜索模具编号/产品/客户"
+- Below search: two segment tabs "模压模具" / "口型模具"
+- Filter chips row: 状态 dropdown, 客户 dropdown
+- Scrollable card list, each card shows:
+  - Left: mold number "5705-JL153-1" in bold
+  - Below: product name "左/右前车门密封条总成"
+  - Below: customer "吉利四川商用车有限公司" in gray small text
+  - Right side: status badge (colored pill "在用")
+  - Right bottom: usage count "已用 1,230 次" in small text
+- Show 5-6 mold cards with realistic data from the JSON
+
+### Screen 4: 模具详情 (Mold Detail)
+- Back arrow + title "模具详情"
+- Top card: mold number "5705-JL153-1" large, status badge "在用" (green pill)
+- Info grid (2 columns):
+  - 类型: 口型模具
+  - 车间: 挤出车间
+  - 首次使用: 2021.9.20
+  - 设计寿命: 50,000 次
+  - 保养周期: 每 5,000 次
+  - 已使用: 12,350 次
+- Progress bar showing life consumption (24.7%), blue fill
+- Divider
+- Section "关联产品" - list of 1-2 products:
+  - 客户: 吉利四川商用车有限公司
+  - 车型: E51
+  - 产品: 左/右前车门密封条总成
+  - 零件号: 9900074986/7
+- Two tabs at bottom of card: "使用记录" / "维保记录"
+- Usage record tab active, showing 3 timeline entries:
+  - 2026.3.7 | 前车门密封条 | 500件 | 张工 | 早班
+  - 2026.3.6 | 前车门密封条 | 480件 | 李工 | 中班
+  - 2026.3.5 | 前车门密封条 | 520件 | 张工 | 早班
+- Manager role: floating button at bottom right "变更状态"
+
+### Screen 5: 新增使用记录 (Add Usage Record)
+- Back arrow + title "新增使用记录"
+- Form layout with labeled fields, each in a white card:
+  - 模具编号: search/select input, showing selected "5705-JL153-1"
+  - 关联产品: dropdown selector (from mold's product list)
+  - 生产数量: number input with stepper, placeholder "请输入数量"
+  - 班次: three radio pills side by side "早班" / "中班" / "晚班"
+  - 日期: date picker, pre-filled "2026-03-08"
+  - 操作人: auto-filled "张工" (grayed, non-editable)
+  - 备注: multi-line text input, placeholder "选填"
+- Bottom: full-width submit button "提交记录" (primary blue)
+
+### Screen 6: 新增维保记录 (Add Maintenance Record) - Manager only
+- Back arrow + title "新增维保记录"
+- Form layout:
+  - 模具编号: search/select input
+  - 维保类型: two radio pills "保养" / "维修"
+  - 维保内容: multi-line text input, placeholder "请描述维保内容"
+  - 日期: date picker, pre-filled today
+  - 操作人: auto-filled current user
+- Bottom: submit button "提交记录"
+
+### Screen 7: 个人中心 (Profile)
+- Top: avatar circle with initials "张", name "张工", role "管理人员"
+- Menu list items with right arrows:
+  - 我的使用记录
+  - 维保提醒设置 (manager only)
+  - 修改密码
+  - 关于
+- Bottom: red text "退出登录"
+
+## Prototype Interactions
+
+- Bottom tab navigation switches between screens 2, 3, 5, 7
+- Mold list card tap → Screen 4 (detail)
+- Home "新增使用记录" button → Screen 5
+- Home "搜索模具" button → Screen 3
+- Detail page "变更状态" → bottom sheet with status options
+- All forms have submit → success toast and return to previous screen
