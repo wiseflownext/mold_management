@@ -1,0 +1,2262 @@
+[
+  {
+    "id": "接角1",
+    "moldNo": "5700-SQ123-148",
+    "firstUseDate": null,
+    "unit": "后序车间",
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "CN202S新",
+        "name": "左前门槛密封条角1-5",
+        "partNo": "LQ5"
+      }
+    ]
+  },
+  {
+    "id": "接角2",
+    "moldNo": "5700-SQ123-149",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "CN202S新",
+        "name": "右前门槛密封条角1-5",
+        "partNo": "RQ5"
+      }
+    ]
+  },
+  {
+    "id": "接角3",
+    "moldNo": "5700-SQ123-150",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "CN202S新",
+        "name": "左后门槛密封条角1-5",
+        "partNo": "LH5"
+      }
+    ]
+  },
+  {
+    "id": "接角4",
+    "moldNo": "5700-SQ123-151",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "CN202S新",
+        "name": "右后门槛密封条角1-5",
+        "partNo": "RH5"
+      }
+    ]
+  },
+  {
+    "id": "接角5",
+    "moldNo": "5700-SQ123-152",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "CN202S新",
+        "name": "左前门槛密封条角2-5",
+        "partNo": "LQ5"
+      }
+    ]
+  },
+  {
+    "id": "接角6",
+    "moldNo": "5700-SQ123-153",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "CN202S新",
+        "name": "右前门槛密封条角2-5",
+        "partNo": "RQ5"
+      }
+    ]
+  },
+  {
+    "id": "接角7",
+    "moldNo": "5700-SQ123-154",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "CN202S新",
+        "name": "左后门槛密封条角2-5",
+        "partNo": "LH5"
+      }
+    ]
+  },
+  {
+    "id": "接角8",
+    "moldNo": "5700-SQ123-155",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "CN202S新",
+        "name": "右后门槛密封条角2-5",
+        "partNo": "RH5"
+      }
+    ]
+  },
+  {
+    "id": "接角9",
+    "moldNo": "5700-SQ123-192",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200B",
+        "name": "左前车门侧密封条 角1",
+        "partNo": "W0003875"
+      }
+    ]
+  },
+  {
+    "id": "接角10",
+    "moldNo": "5700-SQ123-193",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200B",
+        "name": "左前车门侧密封条 角2",
+        "partNo": "W0003875"
+      }
+    ]
+  },
+  {
+    "id": "接角11",
+    "moldNo": "5700-SQ123-194",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200B",
+        "name": "左前车门侧密封条 角3",
+        "partNo": "W0003875"
+      }
+    ]
+  },
+  {
+    "id": "接角12",
+    "moldNo": "5700-SQ123-195",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200B",
+        "name": "右前车门侧密封条 角1",
+        "partNo": "W0003877"
+      }
+    ]
+  },
+  {
+    "id": "接角13",
+    "moldNo": "5700-SQ123-196",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200B",
+        "name": "右前车门侧密封条 角2",
+        "partNo": "W0003877"
+      }
+    ]
+  },
+  {
+    "id": "接角14",
+    "moldNo": "5700-SQ123-197",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200B",
+        "name": "右前车门侧密封条 角3",
+        "partNo": "W0003877"
+      }
+    ]
+  },
+  {
+    "id": "接角15",
+    "moldNo": "5700-SQ123-198",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200PS",
+        "name": "左前门车门侧密封条角1",
+        "partNo": "W0013857"
+      }
+    ]
+  },
+  {
+    "id": "接角16",
+    "moldNo": "5700-SQ123-199",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200PS",
+        "name": "左前门车门侧密封条角2",
+        "partNo": "W0013857"
+      }
+    ]
+  },
+  {
+    "id": "接角17",
+    "moldNo": "5700-SQ123-200",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200PS",
+        "name": "左前门车门侧密封条角3（右前角4）右前门车门侧密封条角3（左前角4）",
+        "partNo": "W0013857"
+      }
+    ]
+  },
+  {
+    "id": "接角18",
+    "moldNo": "5700-SQ123-201",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200PS",
+        "name": "右前门车门侧密封条角1",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角19",
+    "moldNo": "5700-SQ123-202",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200PS",
+        "name": "右前门车门侧密封条角2",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角20",
+    "moldNo": "5700-SQ123-203",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200PS",
+        "name": "前/后门车身侧密封条",
+        "partNo": "W0013856/W0022610"
+      }
+    ]
+  },
+  {
+    "id": "接角21",
+    "moldNo": "5700-SQ123-204",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200PS",
+        "name": "左后门车门侧密封条角1（右后角2）左后门车门侧密封条角2（右后角1）",
+        "partNo": "W0012774"
+      }
+    ]
+  },
+  {
+    "id": "接角22",
+    "moldNo": "5700-SQ123-205",
+    "firstUseDate": "23.12.18",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "F510S",
+        "name": "左前门槛密封条角1",
+        "partNo": 26151846
+      }
+    ]
+  },
+  {
+    "id": "接角23",
+    "moldNo": "5700-SQ123-206",
+    "firstUseDate": "23.12.18",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "F510S",
+        "name": "左前门槛密封条角2",
+        "partNo": 26151846
+      }
+    ]
+  },
+  {
+    "id": "接角24",
+    "moldNo": "5700-SQ123-207",
+    "firstUseDate": "23.12.18",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "F510S",
+        "name": "右前门槛密封条角1",
+        "partNo": 26151852
+      }
+    ]
+  },
+  {
+    "id": "接角25",
+    "moldNo": "5700-SQ123-208",
+    "firstUseDate": "23.12.18",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "F510S",
+        "name": "右前门槛密封条角2",
+        "partNo": 26151852
+      }
+    ]
+  },
+  {
+    "id": "接角26",
+    "moldNo": "5700-SQ123-209",
+    "firstUseDate": "23.12.18",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "F510S",
+        "name": "左后门槛密封条角1",
+        "partNo": 26151721
+      }
+    ]
+  },
+  {
+    "id": "接角27",
+    "moldNo": "5700-SQ123-210",
+    "firstUseDate": "23.12.18",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "F510S",
+        "name": "左后门槛密封条角2",
+        "partNo": 26151721
+      }
+    ]
+  },
+  {
+    "id": "接角28",
+    "moldNo": "5700-SQ123-211",
+    "firstUseDate": "23.12.18",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "F510S",
+        "name": "右后门槛密封条角1",
+        "partNo": 26151727
+      }
+    ]
+  },
+  {
+    "id": "接角29",
+    "moldNo": "5700-SQ123-212",
+    "firstUseDate": "23.12.18",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州富英华工贸有限公司",
+        "model": "F510S",
+        "name": "右后门槛密封条角2",
+        "partNo": 26151727
+      }
+    ]
+  },
+  {
+    "id": "接角30",
+    "moldNo": "5700-SQ123-213A0",
+    "firstUseDate": "24.12.14",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200B",
+        "name": "左前车门侧密封条 角3",
+        "partNo": "W0003875"
+      },
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "G200B",
+        "name": "右前车门侧密封条 角3",
+        "partNo": "W0003877"
+      }
+    ]
+  },
+  {
+    "id": "接角31",
+    "moldNo": "5700-SQ123-214A0",
+    "firstUseDate": "25.3.12",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "五菱 A100C",
+        "name": "左/右前门玻璃导槽密封胶条角1",
+        "partNo": "W0029703"
+      }
+    ]
+  },
+  {
+    "id": "接角32",
+    "moldNo": "5700-SQ123-215A0",
+    "firstUseDate": "25.3.12",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "五菱 A100C",
+        "name": "左/右前门玻璃导槽密封胶条角2",
+        "partNo": "W0029703"
+      }
+    ]
+  },
+  {
+    "id": "接角33",
+    "moldNo": "5700-SQ123-218A0",
+    "firstUseDate": "25.3.12",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "五菱 A100C",
+        "name": "左前门车门侧密封条角1",
+        "partNo": "W0029719"
+      }
+    ]
+  },
+  {
+    "id": "接角34",
+    "moldNo": "5700-SQ123-219A0",
+    "firstUseDate": "25.3.12",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "五菱 A100C",
+        "name": "左前门车门侧密封条角2",
+        "partNo": "W0029719"
+      }
+    ]
+  },
+  {
+    "id": "接角35",
+    "moldNo": "5700-SQ123-220A0",
+    "firstUseDate": "25.3.12",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "五菱 A100C",
+        "name": "右前门车门侧密封条角1",
+        "partNo": "W0029720"
+      }
+    ]
+  },
+  {
+    "id": "接角36",
+    "moldNo": "5700-SQ123-221A0",
+    "firstUseDate": "25.3.12",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "五菱 A100C",
+        "name": "右前门车门侧密封条角2",
+        "partNo": "W0029720"
+      }
+    ]
+  },
+  {
+    "id": "接角37",
+    "moldNo": "5700-SQ123-222A0",
+    "firstUseDate": "25.3.12",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "五菱 A100C",
+        "name": "前门车身侧密封条（对接模）",
+        "partNo": "W0029721"
+      }
+    ]
+  },
+  {
+    "id": "接角38",
+    "moldNo": "5700-SQ123-223A0",
+    "firstUseDate": "25.3.12",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州五菱新能源汽车有限公司",
+        "model": "五菱 A100C",
+        "name": "尾门密封条（对接模）",
+        "partNo": "W0029722"
+      },
+      {
+        "customer": "柳州兆丰汽车部件有限公司",
+        "model": "F520S",
+        "name": "左前门槛密封条角1（双腔）",
+        "partNo": 27138356
+      }
+    ]
+  },
+  {
+    "id": "接角39",
+    "moldNo": "5700-SQ123-224A0",
+    "firstUseDate": "2025.5.10",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州兆丰汽车部件有限公司",
+        "model": "F520S",
+        "name": "左前门槛密封条角2（双腔）",
+        "partNo": 27138356
+      }
+    ]
+  },
+  {
+    "id": "接角40",
+    "moldNo": "5700-SQ123-225A0",
+    "firstUseDate": "2025.5.10",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州兆丰汽车部件有限公司",
+        "model": "F520S",
+        "name": "右前门槛密封条角1（双腔）",
+        "partNo": 27138357
+      }
+    ]
+  },
+  {
+    "id": "接角41",
+    "moldNo": "5700-SQ123-226A0",
+    "firstUseDate": "2025.5.10",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州兆丰汽车部件有限公司",
+        "model": "F520S",
+        "name": "右前门槛密封条角2（双腔）",
+        "partNo": 27138357
+      }
+    ]
+  },
+  {
+    "id": "接角42",
+    "moldNo": "5700-SQ123-227A0",
+    "firstUseDate": "2025.5.10",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州兆丰汽车部件有限公司",
+        "model": "F520S",
+        "name": "左后侧门槛密封条角1（双腔）",
+        "partNo": 27138358
+      }
+    ]
+  },
+  {
+    "id": "接角43",
+    "moldNo": "5700-SQ123-228A0",
+    "firstUseDate": "2025.5.10",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州兆丰汽车部件有限公司",
+        "model": "F520S",
+        "name": "左后侧门槛密封条角2（双腔）",
+        "partNo": 27138358
+      }
+    ]
+  },
+  {
+    "id": "接角44",
+    "moldNo": "5700-SQ123-229A0",
+    "firstUseDate": "2025.5.10",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州兆丰汽车部件有限公司",
+        "model": "F520S",
+        "name": "右后侧门槛密封条角1（双腔）",
+        "partNo": 27138359
+      }
+    ]
+  },
+  {
+    "id": "接角45",
+    "moldNo": "5700-SQ123-230A0",
+    "firstUseDate": "2025.5.10",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州兆丰汽车部件有限公司",
+        "model": "F520S",
+        "name": "右后侧门槛密封条角2（双腔）",
+        "partNo": 27138359
+      }
+    ]
+  },
+  {
+    "id": "接角46",
+    "moldNo": "5700-SY157-1",
+    "firstUseDate": "24.4.6",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州双英科技有限公司",
+        "model": "F410S",
+        "name": "左前门槛密封条角1",
+        "partNo": 26194856
+      }
+    ]
+  },
+  {
+    "id": "接角47",
+    "moldNo": "5700-SY157-2",
+    "firstUseDate": "24.4.6",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州双英科技有限公司",
+        "model": "F410S",
+        "name": "左前门槛密封条角2",
+        "partNo": 26194856
+      }
+    ]
+  },
+  {
+    "id": "接角48",
+    "moldNo": "5700-SY157-3",
+    "firstUseDate": "24.4.6",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州双英科技有限公司",
+        "model": "F410S",
+        "name": "右前门槛密封条角1",
+        "partNo": 26194860
+      }
+    ]
+  },
+  {
+    "id": "接角49",
+    "moldNo": "5700-SY157-4",
+    "firstUseDate": "24.4.6",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州双英科技有限公司",
+        "model": "F410S",
+        "name": "右前门槛密封条角2",
+        "partNo": 26194860
+      }
+    ]
+  },
+  {
+    "id": "接角50",
+    "moldNo": "5700-SY157-5",
+    "firstUseDate": "24.4.6",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州双英科技有限公司",
+        "model": "F410S",
+        "name": "左后门槛密封条角1",
+        "partNo": 26194864
+      }
+    ]
+  },
+  {
+    "id": "接角51",
+    "moldNo": "5700-SY157-6",
+    "firstUseDate": "24.4.6",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州双英科技有限公司",
+        "model": "F410S",
+        "name": "左后门槛密封条角2",
+        "partNo": 26194864
+      }
+    ]
+  },
+  {
+    "id": "接角52",
+    "moldNo": "5700-SY157-7",
+    "firstUseDate": "24.4.6",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州双英科技有限公司",
+        "model": "F410S",
+        "name": "右后门槛密封条角1",
+        "partNo": 26194868
+      }
+    ]
+  },
+  {
+    "id": "接角53",
+    "moldNo": "5700-SY157-8",
+    "firstUseDate": "24.4.6",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "柳州双英科技有限公司",
+        "model": "F410S",
+        "name": "右后门槛密封条角2",
+        "partNo": 26194868
+      }
+    ]
+  },
+  {
+    "id": "接角54",
+    "moldNo": "5700-JF155-3",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "C673",
+        "name": "左前车门挡泥条角1",
+        "partNo": "6102612-ED01"
+      }
+    ]
+  },
+  {
+    "id": "接角55",
+    "moldNo": "5700-JF155-4",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "C673",
+        "name": "左前车门挡泥条角2",
+        "partNo": "6102612-ED01"
+      }
+    ]
+  },
+  {
+    "id": "接角56",
+    "moldNo": "5700-JF155-5",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "C673",
+        "name": "右前车门挡泥条角1",
+        "partNo": "6102622-ED01"
+      }
+    ]
+  },
+  {
+    "id": "接角57",
+    "moldNo": "5700-JF155-6",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "C673",
+        "name": "右前车门挡泥条角2",
+        "partNo": "6102622-ED01"
+      }
+    ]
+  },
+  {
+    "id": "接角58",
+    "moldNo": "5700-JF155-7",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "C673",
+        "name": "左后车门挡泥条角1",
+        "partNo": "6202612-ED01"
+      }
+    ]
+  },
+  {
+    "id": "接角59",
+    "moldNo": "5700-JF155-8",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "C673",
+        "name": "左后车门挡泥条角2",
+        "partNo": "6202612-ED01"
+      }
+    ]
+  },
+  {
+    "id": "接角60",
+    "moldNo": "5700-JF155-9",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "C673",
+        "name": "右后车门挡泥条角1",
+        "partNo": "6202622-ED01"
+      }
+    ]
+  },
+  {
+    "id": "接角61",
+    "moldNo": "5700-JF155-10",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "C673",
+        "name": "右后车门挡泥条角2",
+        "partNo": "6202622-ED01"
+      }
+    ]
+  },
+  {
+    "id": "接角62",
+    "moldNo": "5700--2022-65",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "S203",
+        "name": "左前车门挡泥条角1",
+        "partNo": "6102513-AW22"
+      }
+    ]
+  },
+  {
+    "id": "接角63",
+    "moldNo": "5700-JF155-11A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "S203",
+        "name": "左前车门挡泥条角2",
+        "partNo": "6102513-AW22"
+      }
+    ]
+  },
+  {
+    "id": "接角64",
+    "moldNo": "5700--2022-65-1",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "S203",
+        "name": "右前车门挡泥条角1",
+        "partNo": "6102523-AW23"
+      }
+    ]
+  },
+  {
+    "id": "接角65",
+    "moldNo": "5700-JF155-12A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "S203",
+        "name": "右前车门挡泥条角2",
+        "partNo": "6102523-AW23"
+      }
+    ]
+  },
+  {
+    "id": "接角66",
+    "moldNo": "5700--2022-65-2",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "S203",
+        "name": "左后车门挡泥条角1",
+        "partNo": "6202513-AW22"
+      }
+    ]
+  },
+  {
+    "id": "接角67",
+    "moldNo": "5700--2022-66",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "S203",
+        "name": "左后车门挡泥条角2",
+        "partNo": "6202513-AW22"
+      }
+    ]
+  },
+  {
+    "id": "接角68",
+    "moldNo": "5700--2022-65-3",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "S203",
+        "name": "右后车门挡泥条角1",
+        "partNo": "6202523-AW23"
+      }
+    ]
+  },
+  {
+    "id": "接角69",
+    "moldNo": "5700--2022-66-1",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "重庆金辐汽车零部件有限公司",
+        "model": "S203",
+        "name": "右后车门挡泥条角2",
+        "partNo": "6202523-AW23"
+      }
+    ]
+  },
+  {
+    "id": "接角70",
+    "moldNo": "5700-JL153-1-B",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "左前车门密封条总成角1",
+        "partNo": 9900074986
+      }
+    ]
+  },
+  {
+    "id": "接角71",
+    "moldNo": "5700-JL153-2-B1",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "左前车门密封条总成角2",
+        "partNo": 9900074986
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "右前车门密封条总成角1",
+        "partNo": 9900074987
+      }
+    ]
+  },
+  {
+    "id": "接角72",
+    "moldNo": "5700-JL153-4-B1",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "右前车门密封条总成角2",
+        "partNo": 9900074987
+      }
+    ]
+  },
+  {
+    "id": "接角73",
+    "moldNo": "5700-JL153-5-2",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "左前车门玻璃导槽角1",
+        "partNo": 9900074990
+      }
+    ]
+  },
+  {
+    "id": "接角74",
+    "moldNo": "5700-JL153-6-1",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "左前车门玻璃导槽角2",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角75",
+    "moldNo": "5700-JL153-7-1",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "左前车门玻璃导槽角3",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角76",
+    "moldNo": "5700-JL153-8-1",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "右前车门玻璃导槽角1",
+        "partNo": 9900074991
+      }
+    ]
+  },
+  {
+    "id": "接角77",
+    "moldNo": "5700-JL153-9-1",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "右前车门玻璃导槽角2",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角78",
+    "moldNo": "5700-JL153-10-1",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "右前车门玻璃导槽角3",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角79",
+    "moldNo": "5700-JL153-11-A2",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "左/右前车门框密封条",
+        "partNo": "9900074988/9"
+      }
+    ]
+  },
+  {
+    "id": "接角80",
+    "moldNo": "5700-JL153-11-A3",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "左/右前车门框密封条",
+        "partNo": "9900074988/9"
+      }
+    ]
+  },
+  {
+    "id": "接角81",
+    "moldNo": "5700-JL153-11-A4",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "左/右前车门框密封条",
+        "partNo": "9900074988/9"
+      }
+    ]
+  },
+  {
+    "id": "接角82",
+    "moldNo": "5700-JL153-11-A5",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "左/右前车门框密封条",
+        "partNo": "9900074988/9"
+      }
+    ]
+  },
+  {
+    "id": "接角83",
+    "moldNo": "5700-JL153-11-A5/A6",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "左/右前车门框密封条",
+        "partNo": "9900074988/9"
+      }
+    ]
+  },
+  {
+    "id": "接角84",
+    "moldNo": "5700-JL153-12",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "滑门上部密封条角1",
+        "partNo": 9900074996
+      }
+    ]
+  },
+  {
+    "id": "接角85",
+    "moldNo": "5700-JL153-13",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "滑门上部密封条角2",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角86",
+    "moldNo": "5700-JL153-14",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "滑门门框密封条",
+        "partNo": 9900074998
+      }
+    ]
+  },
+  {
+    "id": "接角87",
+    "moldNo": "5700-JL153-14-A",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "滑门门框密封条",
+        "partNo": 9900074998
+      }
+    ]
+  },
+  {
+    "id": "接角88",
+    "moldNo": "5700-JL153-15",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "尾门中部密封条角1",
+        "partNo": 9900075007
+      }
+    ]
+  },
+  {
+    "id": "接角89",
+    "moldNo": "5700-JL153-15-1",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "尾门中部密封条角1",
+        "partNo": 9900075007
+      }
+    ]
+  },
+  {
+    "id": "接角90",
+    "moldNo": "5700-JL153-16-A",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "尾门中部密封条角2",
+        "partNo": 9900075007
+      }
+    ]
+  },
+  {
+    "id": "接角91",
+    "moldNo": "5700-JL153-16-A-1",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "尾门中部密封条角2",
+        "partNo": 9900075007
+      }
+    ]
+  },
+  {
+    "id": "接角92",
+    "moldNo": "5700-JL153-17",
+    "firstUseDate": "2021.9.20",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "尾门密封条",
+        "partNo": 9900075004
+      }
+    ]
+  },
+  {
+    "id": "接角93",
+    "moldNo": "5700-JL153-17-1",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "尾门密封条",
+        "partNo": 9900075004
+      }
+    ]
+  },
+  {
+    "id": "接角94",
+    "moldNo": "5700-JL153-17-2",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "尾门密封条",
+        "partNo": 9900075004
+      }
+    ]
+  },
+  {
+    "id": "接角95",
+    "moldNo": "5700-JL153-17-A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51",
+        "name": "尾门密封条",
+        "partNo": 9900075004
+      }
+    ]
+  },
+  {
+    "id": "接角96",
+    "moldNo": "5700-JL153-21",
+    "firstUseDate": 2022.4,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "PA2A",
+        "name": "左右前车门门框密封条",
+        "partNo": "8893589789/8893253567"
+      }
+    ]
+  },
+  {
+    "id": "接角97",
+    "moldNo": "5700-JL153-22",
+    "firstUseDate": 2022.4,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "PA2A",
+        "name": "背门密封条",
+        "partNo": 8893314551
+      }
+    ]
+  },
+  {
+    "id": "接角98",
+    "moldNo": "5700-JL153-23",
+    "firstUseDate": 2022.4,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "PA2A",
+        "name": "左前车门头道密封条角1",
+        "partNo": 8893253594
+      }
+    ]
+  },
+  {
+    "id": "接角99",
+    "moldNo": "5700-JL153-24",
+    "firstUseDate": 2022.4,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "PA2A",
+        "name": "左前车门头道密封条角2",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角100",
+    "moldNo": "5700-JL153-25",
+    "firstUseDate": 2022.4,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "PA2A",
+        "name": "右前车门头道密封条角1",
+        "partNo": 8893253608
+      }
+    ]
+  },
+  {
+    "id": "接角101",
+    "moldNo": "5700-JL153-26",
+    "firstUseDate": 2022.4,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "PA2A",
+        "name": "右前车门头道密封条角2",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角102",
+    "moldNo": "5700-JL153-27",
+    "firstUseDate": 2022.4,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "PA2A",
+        "name": "左右前车门玻璃导槽角1",
+        "partNo": 8893253632
+      }
+    ]
+  },
+  {
+    "id": "接角103",
+    "moldNo": "5700-JL153-28",
+    "firstUseDate": 2022.4,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "PA2A",
+        "name": "左右前车门玻璃导槽角2",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角104",
+    "moldNo": "5700-JL153-29",
+    "firstUseDate": 2022.4,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "PA2A",
+        "name": "左右前车门玻璃导槽角1",
+        "partNo": 8893253644
+      }
+    ]
+  },
+  {
+    "id": "接角105",
+    "moldNo": "5700-JL153-30",
+    "firstUseDate": 2022.4,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "PA2A",
+        "name": "左右前车门玻璃导槽角2",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角106",
+    "moldNo": "5700-JL153-31",
+    "firstUseDate": "2023.3.",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "LE22",
+        "name": "后窗玻璃密封条",
+        "partNo": 9900145471
+      }
+    ]
+  },
+  {
+    "id": "接角107",
+    "moldNo": "5700-JL153-32",
+    "firstUseDate": "2023.3.",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "LE22",
+        "name": "左前车门密封条总成角1",
+        "partNo": 9900145476
+      }
+    ]
+  },
+  {
+    "id": "接角108",
+    "moldNo": "5700-JL153-33",
+    "firstUseDate": "2023.3.",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "LE22",
+        "name": "左前车门密封条总成角2",
+        "partNo": 9900145476
+      }
+    ]
+  },
+  {
+    "id": "接角109",
+    "moldNo": "5700-JL153-34",
+    "firstUseDate": "2023.3.",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "LE22",
+        "name": "右前车门密封条总成角1",
+        "partNo": 9900145477
+      }
+    ]
+  },
+  {
+    "id": "接角110",
+    "moldNo": "5700-JL153-35",
+    "firstUseDate": "2023.3.",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "LE22",
+        "name": "右前车门密封条总成角2",
+        "partNo": 9900145477
+      }
+    ]
+  },
+  {
+    "id": "接角111",
+    "moldNo": "5700-JL153-36",
+    "firstUseDate": "2023.3.",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "E51纯电",
+        "name": "后窗玻璃密封条",
+        "partNo": 9900162079
+      }
+    ]
+  },
+  {
+    "id": "接角112",
+    "moldNo": "5700-JL153-41",
+    "firstUseDate": "2024.5.1",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21E",
+        "name": "右滑门外侧密封条角1",
+        "partNo": 9900198001
+      }
+    ]
+  },
+  {
+    "id": "接角113",
+    "moldNo": "5700-JL153-42",
+    "firstUseDate": "2024.5.1",
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21E",
+        "name": "右滑门外侧密封条角2",
+        "partNo": 9900198001
+      }
+    ]
+  },
+  {
+    "id": "接角114",
+    "moldNo": "5700-JL153-43A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左侧围上部密封条角1",
+        "partNo": "9900124718"
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左侧围上部密封条角1",
+        "partNo": 9900131855
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左侧围上部密封条角1",
+        "partNo": 9900131856
+      }
+    ]
+  },
+  {
+    "id": "接角115",
+    "moldNo": "5700-JL153-44A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左侧围上部密封条角2",
+        "partNo": "9900124718"
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左侧围上部密封条角2",
+        "partNo": 9900131855
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左侧围上部密封条角2",
+        "partNo": 9900131856
+      }
+    ]
+  },
+  {
+    "id": "接角116",
+    "moldNo": "5700-JL153-45A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右侧围上部密封条角1",
+        "partNo": 9900131857
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右侧围上部密封条角1",
+        "partNo": 9900124719
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右侧围上部密封条角1",
+        "partNo": 9900127708
+      }
+    ]
+  },
+  {
+    "id": "接角117",
+    "moldNo": "5700-JL153-59A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右侧围上部密封条角2",
+        "partNo": 9900131857
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右侧围上部密封条角2",
+        "partNo": 9900124719
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右侧围上部密封条角2",
+        "partNo": 9900127708
+      }
+    ]
+  },
+  {
+    "id": "接角118",
+    "moldNo": "5700-JL153-46A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左侧围上部密封条角3",
+        "partNo": 9900124718
+      }
+    ]
+  },
+  {
+    "id": "接角119",
+    "moldNo": "5700-JL153-47A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右侧围上部密封条角3",
+        "partNo": 9900131857
+      }
+    ]
+  },
+  {
+    "id": "接角120",
+    "moldNo": "5700-JL153-48A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左侧围上部密封条角3",
+        "partNo": 9900131855
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左侧围上部密封条角3",
+        "partNo": 9900131856
+      }
+    ]
+  },
+  {
+    "id": "接角121",
+    "moldNo": "5700-JL153-49A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右侧围上部密封条角3",
+        "partNo": 9900124719
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右侧围上部密封条角3",
+        "partNo": 9900127708
+      }
+    ]
+  },
+  {
+    "id": "接角122",
+    "moldNo": "5700-JL153-50A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右前门上锁密封罩",
+        "partNo": 9900124972
+      }
+    ]
+  },
+  {
+    "id": "接角123",
+    "moldNo": "5700-JL153-51A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右前门下锁密封罩",
+        "partNo": 9900124973
+      }
+    ]
+  },
+  {
+    "id": "接角124",
+    "moldNo": "5700-JL153-52A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左前门上锁密封罩",
+        "partNo": 9900143907
+      }
+    ]
+  },
+  {
+    "id": "接角125",
+    "moldNo": "5700-JL153-53A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左前门下锁密封罩",
+        "partNo": 9900143909
+      }
+    ]
+  },
+  {
+    "id": "接角126",
+    "moldNo": "5700-JL153-54A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左滑门密封条总成角1",
+        "partNo": 9900131969
+      }
+    ]
+  },
+  {
+    "id": "接角127",
+    "moldNo": "5700-JL153-55A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "左滑门密封条总成角2",
+        "partNo": 9900131969
+      }
+    ]
+  },
+  {
+    "id": "接角128",
+    "moldNo": "5700-JL153-56A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右滑门密封条总成角1",
+        "partNo": 9900124971
+      }
+    ]
+  },
+  {
+    "id": "接角129",
+    "moldNo": "5700-JL153-57A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右滑门密封条总成角1",
+        "partNo": 9900174037
+      }
+    ]
+  },
+  {
+    "id": "接角130",
+    "moldNo": "5700-JL153-58A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右滑门密封条总成角2",
+        "partNo": 9900124971
+      },
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "右滑门密封条总成角2",
+        "partNo": 9900174037
+      }
+    ]
+  },
+  {
+    "id": "接角131",
+    "moldNo": "5700-JL153-60A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "门洞密封条",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角132",
+    "moldNo": "5700-JL153-60A1",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "门洞密封条",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角133",
+    "moldNo": "5700-JL153-60B0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21",
+        "name": "门洞密封条",
+        "partNo": null
+      }
+    ]
+  },
+  {
+    "id": "接角134",
+    "moldNo": "5700-JL153-61A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VU23",
+        "name": "左滑门密封条总成角1",
+        "partNo": 9900247794
+      }
+    ]
+  },
+  {
+    "id": "接角135",
+    "moldNo": "5700-JL153-62A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "VE21E",
+        "name": "背门窗框装饰条",
+        "partNo": "9900251790/0459"
+      }
+    ]
+  },
+  {
+    "id": "接角136",
+    "moldNo": "5700-JL153-63A0",
+    "firstUseDate": null,
+    "unit": null,
+    "cycle": null,
+    "history": null,
+    "products": [
+      {
+        "customer": "吉利四川商用车有限公司",
+        "model": "吉利冷藏车",
+        "name": "尾门门洞密封条",
+        "partNo": 9900251583
+      }
+    ]
+  }
+]

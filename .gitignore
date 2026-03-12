@@ -1,5 +1,9 @@
-node_modules
-dist
+阿里云.txt
+*.zip
+node_modules/
+__pycache__/
 .env
-.env.production
-*.log
+.env.*
+*.pyc
+.DS_Store
+Thumbs.db
