@@ -7,5 +7,6 @@ import { NotificationModule } from '../notification/notification.module';
   imports: [NotificationModule],
   controllers: [ReminderController],
   providers: [ReminderService],
+  exports: [ReminderService],
 })
 export class ReminderModule {}

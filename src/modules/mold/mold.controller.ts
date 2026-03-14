@@ -1,20 +1,23 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, Req, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { MoldService } from './mold.service';
-import { CreateMoldDto, UpdateMoldDto, UpdateDesignLifeDto, QueryMoldDto } from './dto/mold.dto';
+import { CreateMoldDto, UpdateMoldDto, UpdateDesignLifeDto, QueryMoldDto, CreateProductDto } from './dto/mold.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { AuditLogService } from '../audit-log/audit-log.service';
 
 @Controller('molds')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class MoldController {
-  constructor(private moldService: MoldService) {}
+  constructor(private moldService: MoldService, private audit: AuditLogService) {}
 
   @Post()
   @Roles('admin')
-  create(@Body() dto: CreateMoldDto) {
-    return this.moldService.create(dto);
+  async create(@Body() dto: CreateMoldDto, @CurrentUser() user: any, @Req() req: any) {
+    const mold = await this.moldService.create(dto);
+    this.audit.log({ userId: user.id, userName: user.name, action: 'CREATE', targetType: 'mold', targetId: mold.id, detail: `新增模具 ${dto.moldNumber}`, ip: req.ip }).catch(() => {});
+    return mold;
   }
 
   @Get()
@@ -39,8 +42,17 @@ export class MoldController {
 
   @Put(':id')
   @Roles('admin')
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateMoldDto) {
-    return this.moldService.update(id, dto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateMoldDto,
+    @CurrentUser() user: any,
+    @Req() req: any,
+  ) {
+    const result = await this.moldService.update(id, dto);
+    if (dto.status) {
+      this.audit.log({ userId: user.id, userName: user.name, action: 'STATUS_CHANGE', targetType: 'mold', targetId: id, detail: `状态变更为 ${dto.status}`, ip: req.ip });
+    }
+    return result;
   }
 
   @Put(':id/design-life')
@@ -55,13 +67,15 @@ export class MoldController {
 
   @Delete(':id')
   @Roles('admin')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.moldService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: any, @Req() req: any) {
+    const mold = await this.moldService.findOne(id);
+    await this.moldService.remove(id);
+    this.audit.log({ userId: user.id, userName: user.name, action: 'DELETE', targetType: 'mold', targetId: id, detail: `删除模具 ${mold.moldNumber}`, ip: req.ip });
   }
 
   @Post(':id/products')
   @Roles('admin')
-  addProduct(@Param('id', ParseIntPipe) id: number, @Body() data: any) {
+  addProduct(@Param('id', ParseIntPipe) id: number, @Body() data: CreateProductDto) {
     return this.moldService.addProduct(id, data);
   }
 

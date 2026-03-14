@@ -53,8 +53,8 @@ model Mold {
   workshopId       Int?       @map("workshop_id")
   workshop         Workshop?  @relation(fields: [workshopId], references: [id], onDelete: SetNull)
   firstUseDate     DateTime?  @map("first_use_date") @db.Date
-  designLife       Int        @map("design_life")
-  maintenanceCycle Int        @map("maintenance_cycle")
+  designLife       Int        @default(20000) @map("design_life")
+  maintenanceCycle Int        @default(5000) @map("maintenance_cycle")
   usageCount       Int        @default(0) @map("usage_count")
   status           MoldStatus @default(IN_USE)
   createdAt        DateTime   @default(now()) @map("created_at")
@@ -136,6 +136,7 @@ model MaintenanceRecord {
 
   @@index([moldId])
   @@index([recordDate])
+  @@index([operatorId])
   @@map("maintenance_records")
 }
 
@@ -180,6 +181,24 @@ enum NotificationType {
   MAINTENANCE_SOON    @map("maintenance_soon")
   STATUS_CHANGE       @map("status_change")
   USAGE_RECORD        @map("usage_record")
+  LIFE_EXCEEDED       @map("life_exceeded")
+  LIFE_WARNING        @map("life_warning")
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @map("user_id")
+  userName   String   @map("user_name") @db.VarChar(50)
+  action     String   @db.VarChar(50)
+  targetType String   @map("target_type") @db.VarChar(50)
+  targetId   Int?     @map("target_id")
+  detail     String?  @db.Text
+  ip         String?  @db.VarChar(50)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([userId])
+  @@map("audit_logs")
 }
 
 model ReminderSetting {

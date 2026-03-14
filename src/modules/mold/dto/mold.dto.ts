@@ -1,10 +1,10 @@
 import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsArray, ValidateNested, Min } from 'class-validator';
 import { Type, Transform } from 'class-transformer';
 
-class ProductDto {
+export class CreateProductDto {
   @IsOptional() @IsString() customer?: string;
   @IsOptional() @IsString() model?: string;
-  @IsNotEmpty() @IsString() name: string;
+  @IsNotEmpty({ message: '产品名称不能为空' }) @IsString() name: string;
   @IsOptional() @IsString() partNumber?: string;
 }
 
@@ -15,7 +15,7 @@ export class CreateMoldDto {
   @IsOptional() @IsString() firstUseDate?: string;
   @IsInt() @Min(1) designLife: number;
   @IsInt() @Min(1) maintenanceCycle: number;
-  @IsOptional() @IsArray() @ValidateNested({ each: true }) @Type(() => ProductDto) products?: ProductDto[];
+  @IsOptional() @IsArray() @ValidateNested({ each: true }) @Type(() => CreateProductDto) products?: CreateProductDto[];
 }
 
 export class UpdateMoldDto {

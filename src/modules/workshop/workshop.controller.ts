@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { WorkshopService } from './workshop.service';
+import { CreateWorkshopDto, UpdateWorkshopDto } from './dto/workshop.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -11,8 +12,8 @@ export class WorkshopController {
 
   @Post()
   @Roles('admin')
-  create(@Body('name') name: string) {
-    return this.service.create(name);
+  create(@Body() dto: CreateWorkshopDto) {
+    return this.service.create(dto.name);
   }
 
   @Get()
@@ -22,8 +23,8 @@ export class WorkshopController {
 
   @Put(':id')
   @Roles('admin')
-  update(@Param('id', ParseIntPipe) id: number, @Body('name') name: string) {
-    return this.service.update(id, name);
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateWorkshopDto) {
+    return this.service.update(id, dto.name);
   }
 
   @Delete(':id')

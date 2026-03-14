@@ -46,4 +46,18 @@ export class NotificationService {
       data: admins.map((a) => ({ userId: a.id, ...data })),
     });
   }
+
+  async createForMoldOperators(moldId: number, data: { type: any; title: string; message: string }) {
+    const operators = await this.prisma.usageRecord.findMany({
+      where: { moldId },
+      select: { operatorId: true },
+      distinct: ['operatorId'],
+    });
+    const adminIds = (await this.prisma.user.findMany({ where: { role: 'admin' }, select: { id: true } })).map(a => a.id);
+    const opIds = operators.map(o => o.operatorId).filter(id => !adminIds.includes(id));
+    if (!opIds.length) return;
+    await this.prisma.notification.createMany({
+      data: opIds.map(uid => ({ userId: uid, moldId, ...data })),
+    });
+  }
 }

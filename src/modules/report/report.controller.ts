@@ -36,4 +36,20 @@ export class ReportController {
     res.setHeader('Content-Disposition', 'attachment; filename=maintenance_report.csv');
     res.send(csv);
   }
+
+  @Get('mold-ledger')
+  async exportMoldLedger(@Res() res: Response) {
+    const csv = await this.service.exportMoldLedgerCSV();
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename=mold_ledger.csv');
+    res.send(csv);
+  }
+
+  @Get('statistics')
+  getStatistics(
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
+    return this.service.getStatistics(startDate, endDate);
+  }
 }

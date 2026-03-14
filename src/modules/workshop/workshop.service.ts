@@ -24,6 +24,15 @@ export class WorkshopService {
   async remove(id: number) {
     const ws = await this.prisma.workshop.findUnique({ where: { id } });
     if (!ws) throw new NotFoundException('车间不存在');
+
+    const [moldCount, userCount] = await Promise.all([
+      this.prisma.mold.count({ where: { workshopId: id } }),
+      this.prisma.user.count({ where: { workshopId: id } }),
+    ]);
+
+    if (moldCount > 0) throw new ConflictException(`该车间下有 ${moldCount} 个模具，无法删除`);
+    if (userCount > 0) throw new ConflictException(`该车间下有 ${userCount} 个用户，无法删除`);
+
     return this.prisma.workshop.delete({ where: { id } });
   }
 }
