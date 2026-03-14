@@ -69,11 +69,11 @@ export class MoldService {
 
     const lastMaint = await this.prisma.maintenanceRecord.findFirst({
       where: { moldId: id, type: 'MAINTAIN' },
-      orderBy: { recordDate: 'desc' },
-      select: { recordDate: true },
+      orderBy: { createdAt: 'desc' },
+      select: { createdAt: true, recordDate: true },
     });
     const usageAgg = await this.prisma.usageRecord.aggregate({
-      where: { moldId: id, ...(lastMaint ? { recordDate: { gt: lastMaint.recordDate } } : {}) },
+      where: { moldId: id, ...(lastMaint ? { createdAt: { gt: lastMaint.createdAt } } : {}) },
       _sum: { quantity: true },
     });
 
