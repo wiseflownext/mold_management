@@ -203,13 +203,14 @@ model AuditLog {
 }
 
 model ReminderSetting {
-  id                  Int      @id @default(autoincrement())
-  moldType            MoldType @unique @map("mold_type")
-  enabled             Boolean  @default(true)
-  remainingThreshold  Int      @default(300) @map("remaining_threshold")
-  warningPercent      Int      @default(80) @map("warning_percent")
-  overduePercent      Int      @default(100) @map("overdue_percent")
-  updatedAt           DateTime @updatedAt @map("updated_at")
+  id                    Int      @id @default(autoincrement())
+  moldType              MoldType @unique @map("mold_type")
+  enabled               Boolean  @default(true)
+  remainingThreshold    Int      @default(300) @map("remaining_threshold")
+  warningPercent        Int      @default(80) @map("warning_percent")
+  overduePercent        Int      @default(100) @map("overdue_percent")
+  periodicAdvanceDays   Int      @default(7) @map("periodic_advance_days")
+  updatedAt             DateTime @updatedAt @map("updated_at")
 
   @@map("reminder_settings")
 }
