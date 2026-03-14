@@ -55,6 +55,7 @@ model Mold {
   firstUseDate     DateTime?  @map("first_use_date") @db.Date
   designLife       Int        @default(20000) @map("design_life")
   maintenanceCycle Int        @default(5000) @map("maintenance_cycle")
+  periodicMaintenanceDays Int? @map("periodic_maintenance_days")
   usageCount       Int        @default(0) @map("usage_count")
   status           MoldStatus @default(IN_USE)
   createdAt        DateTime   @default(now()) @map("created_at")

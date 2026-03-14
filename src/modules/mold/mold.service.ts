@@ -18,6 +18,7 @@ export class MoldService {
         firstUseDate: dto.firstUseDate ? new Date(dto.firstUseDate) : null,
         designLife: dto.designLife,
         maintenanceCycle: dto.maintenanceCycle,
+        periodicMaintenanceDays: dto.periodicMaintenanceDays,
         products: dto.products?.length
           ? { createMany: { data: dto.products } }
           : undefined,
@@ -69,18 +70,27 @@ export class MoldService {
 
     const lastMaint = await this.prisma.maintenanceRecord.findFirst({
       where: { moldId: id, type: 'MAINTAIN' },
-      orderBy: { createdAt: 'desc' },
-      select: { createdAt: true, recordDate: true },
+      orderBy: { recordDate: 'desc' },
+      select: { recordDate: true },
     });
     const usageAgg = await this.prisma.usageRecord.aggregate({
-      where: { moldId: id, ...(lastMaint ? { createdAt: { gt: lastMaint.createdAt } } : {}) },
+      where: { moldId: id, ...(lastMaint ? { recordDate: { gt: lastMaint.recordDate } } : {}) },
       _sum: { quantity: true },
     });
+
+    const lastMaintenanceDate = lastMaint?.recordDate?.toISOString().slice(0, 10) || null;
+    let daysSinceLastMaintenance: number | null = null;
+    if (lastMaint) {
+      daysSinceLastMaintenance = Math.floor((Date.now() - lastMaint.recordDate.getTime()) / 86400000);
+    } else if (mold.firstUseDate) {
+      daysSinceLastMaintenance = Math.floor((Date.now() - new Date(mold.firstUseDate).getTime()) / 86400000);
+    }
 
     return {
       ...mold,
       sinceLastMaintenance: usageAgg._sum.quantity || 0,
-      lastMaintenanceDate: lastMaint?.recordDate?.toISOString().slice(0, 10) || null,
+      lastMaintenanceDate,
+      daysSinceLastMaintenance,
     };
   }
 

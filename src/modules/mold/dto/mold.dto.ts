@@ -15,6 +15,7 @@ export class CreateMoldDto {
   @IsOptional() @IsString() firstUseDate?: string;
   @IsInt() @Min(1) designLife: number;
   @IsInt() @Min(1) maintenanceCycle: number;
+  @IsOptional() @IsInt() @Min(1) periodicMaintenanceDays?: number;
   @IsOptional() @IsArray() @ValidateNested({ each: true }) @Type(() => CreateProductDto) products?: CreateProductDto[];
 }
 
@@ -23,6 +24,7 @@ export class UpdateMoldDto {
   @IsOptional() @IsInt() workshopId?: number;
   @IsOptional() @IsInt() @Min(1) designLife?: number;
   @IsOptional() @IsInt() @Min(1) maintenanceCycle?: number;
+  @IsOptional() @IsInt() @Min(1) periodicMaintenanceDays?: number;
   @IsOptional() @IsEnum(['IN_USE', 'REPAIRING', 'STOPPED', 'SCRAPPED']) status?: string;
 }
 

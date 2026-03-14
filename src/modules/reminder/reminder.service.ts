@@ -24,8 +24,8 @@ export class ReminderService {
     if (!settings.length) return;
 
     const molds = await this.prisma.mold.findMany({
-      where: { status: 'IN_USE' },
-      select: { id: true, moldNumber: true, type: true, usageCount: true, maintenanceCycle: true, designLife: true },
+      where: { status: { in: ['IN_USE', 'REPAIRING'] } },
+      select: { id: true, moldNumber: true, type: true, usageCount: true, maintenanceCycle: true, designLife: true, periodicMaintenanceDays: true, firstUseDate: true },
     });
 
     for (const mold of molds) {
@@ -37,22 +37,35 @@ export class ReminderService {
       const ratio = (sinceLastMaint / cycle) * 100;
 
       if (ratio >= setting.overduePercent) {
-        const msg = { type: 'MAINTENANCE_OVERDUE' as any, title: '保养超期提醒', message: `模具 ${mold.moldNumber} 已超过保养周期，当前使用 ${sinceLastMaint}/${cycle} 次` };
+        const msg = { type: 'MAINTENANCE_OVERDUE' as any, title: '按次保养超期', message: `模具 ${mold.moldNumber} 已超周期，使用 ${sinceLastMaint}/${cycle} 次` };
         await this.notificationService.createForAllAdmins({ ...msg, moldId: mold.id });
         await this.notificationService.createForMoldOperators(mold.id, msg);
       } else if (ratio >= setting.warningPercent) {
-        const msg = { type: 'MAINTENANCE_SOON' as any, title: '保养预警提醒', message: `模具 ${mold.moldNumber} 即将达到保养周期，当前使用 ${sinceLastMaint}/${cycle} 次` };
+        const msg = { type: 'MAINTENANCE_SOON' as any, title: '按次保养预警', message: `模具 ${mold.moldNumber} 即将到期，使用 ${sinceLastMaint}/${cycle} 次` };
         await this.notificationService.createForAllAdmins({ ...msg, moldId: mold.id });
         await this.notificationService.createForMoldOperators(mold.id, msg);
       }
 
+      if (mold.periodicMaintenanceDays) {
+        const daysSince = await this.getDaysSinceLastMaintenance(mold.id, mold.firstUseDate);
+        if (daysSince >= mold.periodicMaintenanceDays) {
+          const msg = { type: 'MAINTENANCE_OVERDUE' as any, title: '定期保养超期', message: `模具 ${mold.moldNumber} 已超 ${daysSince - mold.periodicMaintenanceDays} 天未保养` };
+          await this.notificationService.createForAllAdmins({ ...msg, moldId: mold.id });
+          await this.notificationService.createForMoldOperators(mold.id, msg);
+        } else if (daysSince >= mold.periodicMaintenanceDays * 0.8) {
+          const msg = { type: 'MAINTENANCE_SOON' as any, title: '定期保养预警', message: `模具 ${mold.moldNumber} 距定期保养还剩 ${mold.periodicMaintenanceDays - daysSince} 天` };
+          await this.notificationService.createForAllAdmins({ ...msg, moldId: mold.id });
+          await this.notificationService.createForMoldOperators(mold.id, msg);
+        }
+      }
+
       const life = mold.designLife || 20000;
       if (mold.usageCount >= life) {
-        const msg = { type: 'LIFE_EXCEEDED' as any, title: '模具寿命超限', message: `模具 ${mold.moldNumber} 累计使用 ${mold.usageCount} 次，已超过设计寿命 ${life} 次` };
+        const msg = { type: 'LIFE_EXCEEDED' as any, title: '模具寿命超限', message: `模具 ${mold.moldNumber} 累计 ${mold.usageCount}/${life} 次` };
         await this.notificationService.createForAllAdmins({ ...msg, moldId: mold.id });
         await this.notificationService.createForMoldOperators(mold.id, msg);
       } else if (mold.usageCount >= life * 0.9) {
-        const msg = { type: 'LIFE_WARNING' as any, title: '模具寿命预警', message: `模具 ${mold.moldNumber} 累计使用 ${mold.usageCount}/${life} 次，即将达到设计寿命` };
+        const msg = { type: 'LIFE_WARNING' as any, title: '模具寿命预警', message: `模具 ${mold.moldNumber} 累计 ${mold.usageCount}/${life} 次` };
         await this.notificationService.createForAllAdmins({ ...msg, moldId: mold.id });
         await this.notificationService.createForMoldOperators(mold.id, msg);
       }
@@ -62,31 +75,50 @@ export class ReminderService {
   async checkSingleMold(moldId: number) {
     const mold = await this.prisma.mold.findUnique({
       where: { id: moldId },
-      select: { id: true, moldNumber: true, type: true, usageCount: true, maintenanceCycle: true, designLife: true, status: true },
+      select: { id: true, moldNumber: true, type: true, usageCount: true, maintenanceCycle: true, designLife: true, status: true, periodicMaintenanceDays: true, firstUseDate: true },
     });
-    if (!mold || mold.status !== 'IN_USE') return;
+    if (!mold || !['IN_USE', 'REPAIRING'].includes(mold.status)) return;
 
     const cycle = mold.maintenanceCycle || 5000;
     const life = mold.designLife || 20000;
     const sinceLastMaint = await this.getUsageSinceLastMaintenance(mold.id);
 
     if (sinceLastMaint >= cycle) {
-      const msg = { type: 'MAINTENANCE_OVERDUE' as any, title: '保养超期提醒', message: `模具 ${mold.moldNumber} 已超过保养周期，当前使用 ${sinceLastMaint}/${cycle} 次` };
+      const msg = { type: 'MAINTENANCE_OVERDUE' as any, title: '按次保养超期', message: `模具 ${mold.moldNumber} 使用 ${sinceLastMaint}/${cycle} 次` };
       await this.notificationService.createForAllAdmins({ ...msg, moldId: mold.id });
       await this.notificationService.createForMoldOperators(mold.id, msg);
     }
 
+    if (mold.periodicMaintenanceDays) {
+      const daysSince = await this.getDaysSinceLastMaintenance(mold.id, mold.firstUseDate);
+      if (daysSince >= mold.periodicMaintenanceDays) {
+        const msg = { type: 'MAINTENANCE_OVERDUE' as any, title: '定期保养超期', message: `模具 ${mold.moldNumber} 已超 ${daysSince - mold.periodicMaintenanceDays} 天未保养` };
+        await this.notificationService.createForAllAdmins({ ...msg, moldId: mold.id });
+        await this.notificationService.createForMoldOperators(mold.id, msg);
+      }
+    }
+
     if (mold.usageCount >= life) {
-      const msg = { type: 'LIFE_EXCEEDED' as any, title: '模具寿命超限', message: `模具 ${mold.moldNumber} 累计使用 ${mold.usageCount} 次，已超过设计寿命 ${life} 次` };
+      const msg = { type: 'LIFE_EXCEEDED' as any, title: '模具寿命超限', message: `模具 ${mold.moldNumber} 累计 ${mold.usageCount}/${life} 次` };
       await this.notificationService.createForAllAdmins({ ...msg, moldId: mold.id });
       await this.notificationService.createForMoldOperators(mold.id, msg);
     }
   }
 
+  private async getDaysSinceLastMaintenance(moldId: number, firstUseDate?: Date | null): Promise<number> {
+    const lastMaint = await this.prisma.maintenanceRecord.findFirst({
+      where: { moldId, type: 'MAINTAIN' },
+      orderBy: { recordDate: 'desc' },
+      select: { recordDate: true },
+    });
+    const base = lastMaint?.recordDate || firstUseDate || new Date();
+    return Math.floor((Date.now() - new Date(base).getTime()) / 86400000);
+  }
+
   private async getUsageSinceLastMaintenance(moldId: number): Promise<number> {
     const lastMaint = await this.prisma.maintenanceRecord.findFirst({
       where: { moldId, type: 'MAINTAIN' },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { recordDate: 'desc' },
     });
 
     if (!lastMaint) {
@@ -95,7 +127,7 @@ export class ReminderService {
     }
 
     const total = await this.prisma.usageRecord.aggregate({
-      where: { moldId, createdAt: { gt: lastMaint.createdAt } },
+      where: { moldId, recordDate: { gt: lastMaint.recordDate } },
       _sum: { quantity: true },
     });
     return total._sum.quantity || 0;
@@ -117,24 +149,28 @@ export class ReminderService {
       const sinceLastMaint = await this.getUsageSinceLastMaintenance(mold.id);
       const maintRemaining = cycle - sinceLastMaint;
       const lifeRemaining = life - mold.usageCount;
+      const daysSince = await this.getDaysSinceLastMaintenance(mold.id, mold.firstUseDate);
+      const periodicDays = mold.periodicMaintenanceDays || 0;
+      const periodicRemaining = periodicDays > 0 ? periodicDays - daysSince : null;
 
       const lastMaint = await this.prisma.maintenanceRecord.findFirst({
         where: { moldId: mold.id, type: 'MAINTAIN' },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { recordDate: 'desc' },
         select: { recordDate: true },
       });
 
       const remaining = Math.min(maintRemaining, lifeRemaining);
+      const isPeriodicOverdue = periodicRemaining !== null && periodicRemaining <= 0;
 
       let urgencyLevel: string;
-      if (remaining <= 0) urgencyLevel = 'CRITICAL';
-      else if (remaining <= 200) urgencyLevel = 'CRITICAL';
-      else if (remaining <= 500) urgencyLevel = 'WARNING';
+      if (remaining <= 0 || isPeriodicOverdue) urgencyLevel = 'CRITICAL';
+      else if (remaining <= 200 || (periodicRemaining !== null && periodicRemaining <= Math.ceil(periodicDays * 0.2))) urgencyLevel = 'CRITICAL';
+      else if (remaining <= 500 || (periodicRemaining !== null && periodicRemaining <= Math.ceil(periodicDays * 0.4))) urgencyLevel = 'WARNING';
       else urgencyLevel = 'NORMAL';
 
-      const isOverdue = maintRemaining <= 0 || lifeRemaining <= 0;
+      const isOverdue = maintRemaining <= 0 || lifeRemaining <= 0 || isPeriodicOverdue;
 
-      if (urgencyLevel === 'NORMAL' && maintRemaining > cycle * 0.4 && lifeRemaining > life * 0.4) continue;
+      if (urgencyLevel === 'NORMAL' && maintRemaining > cycle * 0.4 && lifeRemaining > life * 0.4 && (periodicRemaining === null || periodicRemaining > periodicDays * 0.4)) continue;
 
       results.push({
         moldId: mold.id,
@@ -152,6 +188,9 @@ export class ReminderService {
         isOverdue,
         urgencyLevel,
         lastMaintenanceDate: lastMaint?.recordDate?.toISOString().slice(0, 10) || null,
+        periodicMaintenanceDays: periodicDays || null,
+        daysSinceLastMaintenance: daysSince,
+        periodicRemaining,
       });
     }
 
