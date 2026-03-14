@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateMaintenanceRecordDto, QueryMaintenanceRecordDto } from './dto/maintenance-record.dto';
 
@@ -9,7 +9,6 @@ export class MaintenanceRecordService {
   async create(dto: CreateMaintenanceRecordDto, operatorId: number) {
     const mold = await this.prisma.mold.findUnique({ where: { id: dto.moldId } });
     if (!mold) throw new NotFoundException('模具不存在');
-    if (mold.status === 'SCRAPPED') throw new BadRequestException('报废模具禁止录入任何记录');
 
     return this.prisma.maintenanceRecord.create({
       data: {
