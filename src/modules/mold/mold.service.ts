@@ -167,7 +167,7 @@ export class MoldService {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const [recordCount, totalProduction, activeMolds] = await Promise.all([
+    const [recordCount, totalProduction, activeMolds, maintCount] = await Promise.all([
       this.prisma.usageRecord.count({ where: { recordDate: { gte: today, lt: tomorrow } } }),
       this.prisma.usageRecord.aggregate({ where: { recordDate: { gte: today, lt: tomorrow } }, _sum: { quantity: true } }),
       this.prisma.usageRecord.findMany({
@@ -175,12 +175,14 @@ export class MoldService {
         select: { moldId: true },
         distinct: ['moldId'],
       }),
+      this.prisma.maintenanceRecord.count({ where: { recordDate: { gte: today, lt: tomorrow } } }),
     ]);
 
     return {
       recordCount,
       totalProduction: totalProduction._sum.quantity || 0,
       activeMolds: activeMolds.length,
+      maintCount,
     };
   }
 
