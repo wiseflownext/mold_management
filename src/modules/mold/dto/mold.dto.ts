@@ -16,15 +16,19 @@ export class CreateMoldDto {
   @IsInt() @Min(1) designLife: number;
   @IsInt() @Min(1) maintenanceCycle: number;
   @IsOptional() @IsInt() @Min(1) periodicMaintenanceDays?: number;
+  @IsOptional() @IsInt() @Min(1) cavityCount?: number;
   @IsOptional() @IsArray() @ValidateNested({ each: true }) @Type(() => CreateProductDto) products?: CreateProductDto[];
 }
 
 export class UpdateMoldDto {
+  @IsOptional() @IsString() moldNumber?: string;
   @IsOptional() @IsEnum(['COMPRESSION', 'EXTRUSION', 'CORNER']) type?: string;
   @IsOptional() @IsInt() workshopId?: number;
+  @IsOptional() @IsString() firstUseDate?: string;
   @IsOptional() @IsInt() @Min(1) designLife?: number;
   @IsOptional() @IsInt() @Min(1) maintenanceCycle?: number;
   @IsOptional() @IsInt() @Min(1) periodicMaintenanceDays?: number;
+  @IsOptional() @IsInt() @Min(1) cavityCount?: number;
   @IsOptional() @IsEnum(['IN_USE', 'REPAIRING', 'STOPPED', 'SCRAPPED']) status?: string;
 }
 

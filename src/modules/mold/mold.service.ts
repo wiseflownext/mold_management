@@ -19,6 +19,7 @@ export class MoldService {
         designLife: dto.designLife,
         maintenanceCycle: dto.maintenanceCycle,
         periodicMaintenanceDays: dto.periodicMaintenanceDays,
+        cavityCount: dto.cavityCount ?? 1,
         products: dto.products?.length
           ? { createMany: { data: dto.products } }
           : undefined,
@@ -96,9 +97,12 @@ export class MoldService {
 
   async update(id: number, dto: UpdateMoldDto) {
     await this.findOne(id);
+    const { designLife, firstUseDate, ...rest } = dto as any;
+    const data: any = { ...rest };
+    if (firstUseDate) data.firstUseDate = new Date(firstUseDate);
     return this.prisma.mold.update({
       where: { id },
-      data: dto as any,
+      data,
       include: { products: true, workshop: true },
     });
   }

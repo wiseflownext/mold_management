@@ -51,6 +51,8 @@ export class MoldController {
     const result = await this.moldService.update(id, dto);
     if (dto.status) {
       this.audit.log({ userId: user.id, userName: user.name, action: 'STATUS_CHANGE', targetType: 'mold', targetId: id, detail: `状态变更为 ${dto.status}`, ip: req.ip });
+    } else {
+      this.audit.log({ userId: user.id, userName: user.name, action: 'UPDATE', targetType: 'mold', targetId: id, detail: `编辑模具信息`, ip: req.ip }).catch(() => {});
     }
     return result;
   }
