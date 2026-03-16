@@ -118,7 +118,8 @@ export class ReminderService {
   private async getUsageSinceLastMaintenance(moldId: number): Promise<number> {
     const lastMaint = await this.prisma.maintenanceRecord.findFirst({
       where: { moldId, type: 'MAINTAIN' },
-      orderBy: { recordDate: 'desc' },
+      orderBy: [{ recordDate: 'desc' }, { createdAt: 'desc' }],
+      select: { recordDate: true, createdAt: true },
     });
 
     if (!lastMaint) {
@@ -127,7 +128,13 @@ export class ReminderService {
     }
 
     const total = await this.prisma.usageRecord.aggregate({
-      where: { moldId, recordDate: { gt: lastMaint.recordDate } },
+      where: {
+        moldId,
+        OR: [
+          { recordDate: { gt: lastMaint.recordDate } },
+          { recordDate: { equals: lastMaint.recordDate }, createdAt: { gt: lastMaint.createdAt } },
+        ],
+      },
       _sum: { quantity: true },
     });
     return total._sum.quantity || 0;

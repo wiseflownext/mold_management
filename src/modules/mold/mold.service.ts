@@ -71,15 +71,32 @@ export class MoldService {
     });
     if (!mold) throw new NotFoundException('模具不存在');
 
-    const lastMaint = await this.prisma.maintenanceRecord.findFirst({
-      where: { moldId: id, type: 'MAINTAIN' },
-      orderBy: { recordDate: 'desc' },
-      select: { recordDate: true },
-    });
-    const usageAgg = await this.prisma.usageRecord.aggregate({
-      where: { moldId: id, ...(lastMaint ? { recordDate: { gt: lastMaint.recordDate } } : {}) },
-      _sum: { quantity: true },
-    });
+    const [lastMaint, totalMaintenanceCount] = await Promise.all([
+      this.prisma.maintenanceRecord.findFirst({
+        where: { moldId: id, type: 'MAINTAIN' },
+        orderBy: [{ recordDate: 'desc' }, { createdAt: 'desc' }],
+        select: { recordDate: true, createdAt: true },
+      }),
+      this.prisma.maintenanceRecord.count({
+        where: { moldId: id, type: 'MAINTAIN' },
+      }),
+    ]);
+
+    const usageAgg = lastMaint
+      ? await this.prisma.usageRecord.aggregate({
+          where: {
+            moldId: id,
+            OR: [
+              { recordDate: { gt: lastMaint.recordDate } },
+              { recordDate: { equals: lastMaint.recordDate }, createdAt: { gt: lastMaint.createdAt } },
+            ],
+          },
+          _sum: { quantity: true },
+        })
+      : await this.prisma.usageRecord.aggregate({
+          where: { moldId: id },
+          _sum: { quantity: true },
+        });
 
     const lastMaintenanceDate = lastMaint?.recordDate?.toISOString().slice(0, 10) || null;
     let daysSinceLastMaintenance: number | null = null;
@@ -94,6 +111,7 @@ export class MoldService {
       sinceLastMaintenance: usageAgg._sum.quantity || 0,
       lastMaintenanceDate,
       daysSinceLastMaintenance,
+      totalMaintenanceCount,
     };
   }
 
