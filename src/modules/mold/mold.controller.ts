@@ -81,6 +81,12 @@ export class MoldController {
     return this.moldService.addProduct(id, data);
   }
 
+  @Put('products/:productId')
+  @Roles('admin')
+  updateProduct(@Param('productId', ParseIntPipe) productId: number, @Body() data: CreateProductDto) {
+    return this.moldService.updateProduct(productId, data);
+  }
+
   @Delete('products/:productId')
   @Roles('admin')
   removeProduct(@Param('productId', ParseIntPipe) productId: number) {

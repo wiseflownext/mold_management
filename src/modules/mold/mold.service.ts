@@ -36,6 +36,8 @@ export class MoldService {
         { moldNumber: { contains: keyword } },
         { products: { some: { name: { contains: keyword } } } },
         { products: { some: { customer: { contains: keyword } } } },
+        { products: { some: { model: { contains: keyword } } } },
+        { products: { some: { partNumber: { contains: keyword } } } },
       ];
     }
     if (status) where.status = status;
@@ -167,6 +169,10 @@ export class MoldService {
   async addProduct(moldId: number, data: { customer?: string; model?: string; name: string; partNumber?: string }) {
     await this.findOne(moldId);
     return this.prisma.moldProduct.create({ data: { moldId, ...data } });
+  }
+
+  async updateProduct(productId: number, data: { customer?: string; model?: string; name?: string; partNumber?: string }) {
+    return this.prisma.moldProduct.update({ where: { id: productId }, data });
   }
 
   async removeProduct(productId: number) {
