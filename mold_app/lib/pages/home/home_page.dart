@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/mold_provider.dart';
+import '../../providers/refresh.dart';
 import '../../services/home_service.dart';
 import '../../models/reminder.dart';
 import '../../config/theme.dart';
@@ -28,9 +29,7 @@ class HomePage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       body: RefreshIndicator(
-        onRefresh: () async {
-          ref.invalidate(dashboardProvider);
-        },
+        onRefresh: () async => refreshAll(ref),
         child: ListView(
           padding: EdgeInsets.zero,
           physics: const AlwaysScrollableScrollPhysics(),
@@ -411,33 +410,53 @@ class _ReminderCard extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Expanded(
                 child: Text(
                   '${a.moldNumber}$productInfo',
-                  style: const TextStyle(
-                      fontSize: 14, color: Color(0xFF111827)),
+                  style: const TextStyle(fontSize: 14, color: Color(0xFF111827)),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Text(
-                '剩余 $remaining 次',
-                style: TextStyle(fontSize: 13, color: color),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(4)),
+                child: Text(
+                  remaining <= 0 ? '已逾期${-remaining}次' : '剩余${remaining}次',
+                  style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 6),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(2),
-            child: LinearProgressIndicator(
-              value: progress,
-              backgroundColor: const Color(0xFFE5E7EB),
-              valueColor: AlwaysStoppedAnimation(color),
-              minHeight: 4,
+          Stack(children: [
+            Container(height: 6, decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(3))),
+            FractionallySizedBox(
+              widthFactor: progress.clamp(0.0, 1.0),
+              child: Container(
+                height: 6,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [color.withValues(alpha: 0.6), color]),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
             ),
-          ),
+          ]),
+          if (a.periodicMaintenanceDays != null && a.periodicMaintenanceDays! > 0) ...[
+            const SizedBox(height: 4),
+            Text(
+              (a.periodicRemaining ?? 0) <= 0
+                  ? '定期保养已超 ${-(a.periodicRemaining ?? 0)} 天'
+                  : '定期保养剩 ${a.periodicRemaining} 天',
+              style: TextStyle(
+                fontSize: 11,
+                color: (a.periodicRemaining ?? 0) <= 0 ? const Color(0xFFEF4444) : const Color(0xFF6B7280),
+              ),
+            ),
+          ],
         ],
       ),
     );

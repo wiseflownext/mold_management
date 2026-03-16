@@ -13,6 +13,7 @@ import 'pages/reminder/reminder_list_page.dart';
 import 'pages/profile/profile_page.dart';
 import 'pages/mold/mold_detail_page.dart';
 import 'pages/mold/add_mold_page.dart';
+import 'pages/mold/edit_mold_page.dart';
 import 'pages/maintenance/add_maintenance_page.dart';
 import 'pages/usage_record/my_records_page.dart';
 import 'pages/reminder/reminder_settings_page.dart';
@@ -71,6 +72,7 @@ final _routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: '/molds/:id', builder: (c, s) => MoldDetailPage(id: s.pathParameters['id']!)),
       GoRoute(path: '/add-mold', builder: (_, __) => const AddMoldPage()),
+      GoRoute(path: '/edit-mold', builder: (c, s) => EditMoldPage(moldId: s.uri.queryParameters['id'] ?? '')),
       GoRoute(path: '/add-usage-for', builder: (c, s) => AddUsagePage(moldId: s.uri.queryParameters['moldId'])),
       GoRoute(path: '/add-maintenance', builder: (c, s) => AddMaintenancePage(moldId: s.uri.queryParameters['moldId'])),
       GoRoute(path: '/my-records', builder: (_, __) => const MyRecordsPage()),

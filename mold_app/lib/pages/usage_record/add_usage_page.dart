@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/mold_provider.dart';
+import '../../providers/refresh.dart';
 import '../../services/usage_record_service.dart';
 import '../../services/mold_service.dart';
 import '../../models/mold.dart';
@@ -77,14 +78,6 @@ class _AddUsagePageState extends ConsumerState<AddUsagePage> {
       Fluttertoast.showToast(msg: '请选择模具');
       return;
     }
-    if (_mold!.status == 'SCRAPPED') {
-      Fluttertoast.showToast(msg: '报废模具禁止录入任何记录');
-      return;
-    }
-    if (_mold!.status == 'REPAIRING') {
-      Fluttertoast.showToast(msg: '维修中的模具只能录入维保记录');
-      return;
-    }
     if (_product == null || _product!.isEmpty) {
       Fluttertoast.showToast(msg: '请选择关联产品');
       return;
@@ -104,9 +97,7 @@ class _AddUsagePageState extends ConsumerState<AddUsagePage> {
         DateFormat('yyyy-MM-dd').format(_date),
         note: _noteCtrl.text.trim().isEmpty ? null : _noteCtrl.text.trim(),
       );
-      if (_mold != null) ref.invalidate(moldDetailProvider(_mold!.id.toString()));
-      ref.invalidate(moldListNotifierProvider);
-      ref.invalidate(dashboardProvider);
+      refreshAfterRecord(ref, moldId: _mold?.id.toString());
       setState(() {
         _loading = false;
         _showSuccess = true;

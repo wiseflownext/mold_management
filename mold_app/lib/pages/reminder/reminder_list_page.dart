@@ -258,13 +258,51 @@ class _AlertCard extends StatelessWidget {
                   ]),
                   const SizedBox(height: 10),
                   Row(children: [
-                    Text(remaining <= 0 ? '已逾期${-remaining}次' : '剩余${remaining}次', style: TextStyle(fontSize: 12, color: s.bar)),
-                    const SizedBox(width: 12),
-                    Expanded(child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: LinearProgressIndicator(value: progress, backgroundColor: s.bar.withValues(alpha: 0.2), valueColor: AlwaysStoppedAnimation(s.bar), minHeight: 6),
-                    )),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(color: s.bar.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(4)),
+                      child: Text(remaining <= 0 ? '已逾期${-remaining}次' : '剩余${remaining}次', style: TextStyle(fontSize: 11, color: s.bar, fontWeight: FontWeight.w600)),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(child: Stack(children: [
+                      Container(height: 8, decoration: BoxDecoration(color: s.bar.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(4))),
+                      FractionallySizedBox(
+                        widthFactor: progress.clamp(0.0, 1.0),
+                        child: Container(
+                          height: 8,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(colors: [s.bar.withValues(alpha: 0.6), s.bar]),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ])),
                   ]),
+                  if (alert.periodicMaintenanceDays != null && alert.periodicMaintenanceDays! > 0) ...[
+                    const SizedBox(height: 8),
+                    Builder(builder: (_) {
+                      final days = alert.daysSinceLastMaintenance ?? 0;
+                      final period = alert.periodicMaintenanceDays!;
+                      final pRemain = period - days;
+                      final pProgress = (days / period).clamp(0.0, 1.0);
+                      final pColor = pRemain <= 0 ? const Color(0xFFEF4444) : days >= period * 0.8 ? const Color(0xFFF59E0B) : s.bar;
+                      return Row(children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(color: pColor.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(4)),
+                          child: Text(pRemain <= 0 ? '定期超${-pRemain}天' : '定期剩${pRemain}天', style: TextStyle(fontSize: 11, color: pColor, fontWeight: FontWeight.w600)),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(child: Stack(children: [
+                          Container(height: 8, decoration: BoxDecoration(color: pColor.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(4))),
+                          FractionallySizedBox(
+                            widthFactor: pProgress,
+                            child: Container(height: 8, decoration: BoxDecoration(gradient: LinearGradient(colors: [pColor.withValues(alpha: 0.6), pColor]), borderRadius: BorderRadius.circular(4))),
+                          ),
+                        ])),
+                      ]);
+                    }),
+                  ],
                 ]),
               )),
             ]),

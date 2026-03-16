@@ -14,6 +14,9 @@ class MaintenanceAlert {
   final bool? isOverdue;
   final String? urgencyLevel;
   final DateTime? lastMaintenanceDate;
+  final int? periodicMaintenanceDays;
+  final int? daysSinceLastMaintenance;
+  final int? periodicRemaining;
 
   MaintenanceAlert({
     required this.moldId,
@@ -31,6 +34,9 @@ class MaintenanceAlert {
     this.isOverdue,
     this.urgencyLevel,
     this.lastMaintenanceDate,
+    this.periodicMaintenanceDays,
+    this.daysSinceLastMaintenance,
+    this.periodicRemaining,
   });
 
   factory MaintenanceAlert.fromJson(Map<String, dynamic> json) =>
@@ -54,6 +60,9 @@ class MaintenanceAlert {
         lastMaintenanceDate: json['lastMaintenanceDate'] != null
             ? DateTime.tryParse(json['lastMaintenanceDate'].toString())
             : null,
+        periodicMaintenanceDays: (json['periodicMaintenanceDays'] as num?)?.toInt(),
+        daysSinceLastMaintenance: (json['daysSinceLastMaintenance'] as num?)?.toInt(),
+        periodicRemaining: (json['periodicRemaining'] as num?)?.toInt(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -83,6 +92,7 @@ class ReminderSetting {
   final int remainingThreshold;
   final int warningPercent;
   final int overduePercent;
+  final int periodicAdvanceDays;
 
   ReminderSetting({
     required this.id,
@@ -91,6 +101,7 @@ class ReminderSetting {
     this.remainingThreshold = 300,
     this.warningPercent = 80,
     this.overduePercent = 100,
+    this.periodicAdvanceDays = 7,
   });
 
   factory ReminderSetting.fromJson(Map<String, dynamic> json) => ReminderSetting(
@@ -100,6 +111,7 @@ class ReminderSetting {
         remainingThreshold: (json['remainingThreshold'] as num?)?.toInt() ?? 300,
         warningPercent: (json['warningPercent'] as num?)?.toInt() ?? 80,
         overduePercent: (json['overduePercent'] as num?)?.toInt() ?? 100,
+        periodicAdvanceDays: (json['periodicAdvanceDays'] as num?)?.toInt() ?? 7,
       );
 
   Map<String, dynamic> toJson() => {

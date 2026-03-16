@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../providers/mold_provider.dart';
-import '../../providers/reminder_provider.dart';
+import '../../providers/refresh.dart';
 
 class AppShell extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;
   const AppShell({super.key, required this.navigationShell});
 
   void _onTap(WidgetRef ref, int index) {
-    if (index == 0) ref.invalidate(dashboardProvider);
-    if (index == 3) ref.invalidate(alertsProvider);
+    if (index == 0 || index == 1 || index == 3) refreshAll(ref);
     navigationShell.goBranch(index);
   }
 

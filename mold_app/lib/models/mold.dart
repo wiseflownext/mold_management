@@ -18,6 +18,12 @@ class Mold {
   final List<MoldProduct> products;
   final List<UsageRecord> usageRecords;
   final List<MaintenanceRecord> maintenanceRecords;
+  final int sinceLastMaintenance;
+  final String? lastMaintenanceDate;
+  final int? daysSinceLastMaintenance;
+  final int? periodicMaintenanceDays;
+  final int cavityCount;
+  final int totalMaintenanceCount;
 
   Mold({
     required this.id,
@@ -35,6 +41,12 @@ class Mold {
     this.products = const [],
     this.usageRecords = const [],
     this.maintenanceRecords = const [],
+    this.sinceLastMaintenance = 0,
+    this.lastMaintenanceDate,
+    this.daysSinceLastMaintenance,
+    this.periodicMaintenanceDays,
+    this.cavityCount = 1,
+    this.totalMaintenanceCount = 0,
   });
 
   factory Mold.fromJson(Map<String, dynamic> json) {
@@ -77,6 +89,12 @@ class Mold {
               .map((e) => MaintenanceRecord.fromJson(e as Map<String, dynamic>))
               .toList()
           : [],
+      sinceLastMaintenance: (json['sinceLastMaintenance'] as num?)?.toInt() ?? 0,
+      lastMaintenanceDate: json['lastMaintenanceDate'] as String?,
+      daysSinceLastMaintenance: (json['daysSinceLastMaintenance'] as num?)?.toInt(),
+      periodicMaintenanceDays: (json['periodicMaintenanceDays'] as num?)?.toInt(),
+      cavityCount: (json['cavityCount'] as num?)?.toInt() ?? 1,
+      totalMaintenanceCount: (json['totalMaintenanceCount'] as num?)?.toInt() ?? 0,
     );
   }
 

@@ -77,6 +77,11 @@ class MoldService {
     return _parseData(r, MoldProduct.fromJson);
   }
 
+  Future<MoldProduct> updateProduct(String productId, Map<String, dynamic> data) async {
+    final r = await _api.put(ApiConfig.moldProduct(int.tryParse(productId) ?? 0), data);
+    return _parseData(r, MoldProduct.fromJson);
+  }
+
   Future<void> removeProduct(String productId) async {
     await _api.delete(ApiConfig.moldProduct(int.tryParse(productId) ?? 0));
   }

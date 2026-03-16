@@ -136,7 +136,7 @@ class _MoldListPageState extends ConsumerState<MoldListPage> {
                 controller: _searchCtrl,
                 style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
-                  hintText: '搜索模具编号/产品/客户',
+                  hintText: '搜索编号/产品/客户/车型/零件号',
                   hintStyle: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 14),
                   prefixIcon: const Icon(Icons.search, color: Color(0xFF9CA3AF), size: 20),
                   suffixIcon: _searchCtrl.text.isNotEmpty

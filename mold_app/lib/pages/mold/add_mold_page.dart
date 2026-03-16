@@ -8,6 +8,7 @@ import '../../services/workshop_service.dart';
 import '../../models/workshop.dart';
 import '../../config/constants.dart';
 import '../../providers/mold_provider.dart';
+import '../../providers/refresh.dart';
 import '../../providers/workshop_provider.dart';
 
 class AddMoldPage extends ConsumerStatefulWidget {
@@ -22,6 +23,8 @@ class _AddMoldPageState extends ConsumerState<AddMoldPage> {
   final _moldNumberCtrl = TextEditingController();
   final _designLifeCtrl = TextEditingController();
   final _maintCycleCtrl = TextEditingController();
+  final _periodicDaysCtrl = TextEditingController();
+  final _cavityCtrl = TextEditingController();
 
   MoldType _type = MoldType.extrusion;
   String? _workshopId;
@@ -34,6 +37,8 @@ class _AddMoldPageState extends ConsumerState<AddMoldPage> {
     _moldNumberCtrl.dispose();
     _designLifeCtrl.dispose();
     _maintCycleCtrl.dispose();
+    _periodicDaysCtrl.dispose();
+    _cavityCtrl.dispose();
     for (final p in _products) {
       p.dispose();
     }
@@ -64,6 +69,8 @@ class _AddMoldPageState extends ConsumerState<AddMoldPage> {
         if (_firstUseDate != null) 'firstUseDate': DateFormat('yyyy-MM-dd').format(_firstUseDate!),
         'designLife': _designLife!,
         'maintenanceCycle': _maintCycle!,
+        if (_periodicDaysCtrl.text.isNotEmpty) 'periodicMaintenanceDays': int.tryParse(_periodicDaysCtrl.text),
+        'cavityCount': int.tryParse(_cavityCtrl.text) ?? 1,
         'products': _products
             .map((p) => {
                   'name': p.nameCtrl.text.trim(),
@@ -75,7 +82,7 @@ class _AddMoldPageState extends ConsumerState<AddMoldPage> {
       };
       await MoldService.instance.create(data);
       if (!mounted) return;
-      ref.invalidate(moldListNotifierProvider);
+      refreshAfterMoldChange(ref);
       context.go('/molds');
     } catch (e) {
       Fluttertoast.showToast(msg: '$e'.replaceAll('Exception: ', ''));
@@ -279,6 +286,14 @@ class _AddMoldPageState extends ConsumerState<AddMoldPage> {
             final n = int.tryParse(v ?? '');
             return n == null || n < 1 ? '请输入正整数' : null;
           }, onChanged: (_) => setState(() {})),
+          const SizedBox(height: 12),
+          _input(_periodicDaysCtrl, '定期保养(天)  如30=月保 90=季保', keyboardType: TextInputType.number),
+          const SizedBox(height: 12),
+          _input(_cavityCtrl, '模腔数(一模出几件)', keyboardType: TextInputType.number, validator: (v) {
+            if (v == null || v.isEmpty) return null;
+            final n = int.tryParse(v);
+            return n != null && n >= 1 ? null : '请输入>=1的整数';
+          }),
           if (_maintCount != null) ...[
             const SizedBox(height: 10),
             Container(

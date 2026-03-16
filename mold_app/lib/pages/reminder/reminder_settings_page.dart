@@ -41,6 +41,7 @@ class _ReminderSettingsPageState extends ConsumerState<ReminderSettingsPage> {
                       remainingThreshold: s.remainingThreshold,
                       warningPercent: s.warningPercent,
                       overduePercent: s.overduePercent,
+                      periodicAdvanceDays: s.periodicAdvanceDays,
                     ),
                   );
                 }
@@ -140,12 +141,7 @@ class _ReminderSettingsPageState extends ConsumerState<ReminderSettingsPage> {
                   value: s.enabled,
                   activeColor: const Color(0xFF1A73E8),
                   onChanged: (v) {
-                    setState(() => _settings[type] = _LocalSetting(
-                          enabled: v,
-                          remainingThreshold: s.remainingThreshold,
-                          warningPercent: s.warningPercent,
-                          overduePercent: s.overduePercent,
-                        ));
+                    setState(() => _settings[type] = _LocalSetting(enabled: v, remainingThreshold: s.remainingThreshold, warningPercent: s.warningPercent, overduePercent: s.overduePercent, periodicAdvanceDays: s.periodicAdvanceDays));
                   },
                 ),
               ],
@@ -153,28 +149,16 @@ class _ReminderSettingsPageState extends ConsumerState<ReminderSettingsPage> {
             if (s.enabled) ...[
               const SizedBox(height: 8),
               _inputRow('剩余次数阈值', s.remainingThreshold, (v) {
-                setState(() => _settings[type] = _LocalSetting(
-                      enabled: s.enabled,
-                      remainingThreshold: v,
-                      warningPercent: s.warningPercent,
-                      overduePercent: s.overduePercent,
-                    ));
+                setState(() => _settings[type] = _LocalSetting(enabled: s.enabled, remainingThreshold: v, warningPercent: s.warningPercent, overduePercent: s.overduePercent, periodicAdvanceDays: s.periodicAdvanceDays));
               }),
               _sliderRow('预警百分比', s.warningPercent.toDouble(), 0, 100, 20, (v) {
-                setState(() => _settings[type] = _LocalSetting(
-                      enabled: s.enabled,
-                      remainingThreshold: s.remainingThreshold,
-                      warningPercent: v.round(),
-                      overduePercent: s.overduePercent,
-                    ));
+                setState(() => _settings[type] = _LocalSetting(enabled: s.enabled, remainingThreshold: s.remainingThreshold, warningPercent: v.round(), overduePercent: s.overduePercent, periodicAdvanceDays: s.periodicAdvanceDays));
               }),
               _sliderRow('逾期百分比', s.overduePercent.toDouble(), 0, 100, 20, (v) {
-                setState(() => _settings[type] = _LocalSetting(
-                      enabled: s.enabled,
-                      remainingThreshold: s.remainingThreshold,
-                      warningPercent: s.warningPercent,
-                      overduePercent: v.round(),
-                    ));
+                setState(() => _settings[type] = _LocalSetting(enabled: s.enabled, remainingThreshold: s.remainingThreshold, warningPercent: s.warningPercent, overduePercent: v.round(), periodicAdvanceDays: s.periodicAdvanceDays));
+              }),
+              _inputRow('定期保养提前告警(天)', s.periodicAdvanceDays, (v) {
+                setState(() => _settings[type] = _LocalSetting(enabled: s.enabled, remainingThreshold: s.remainingThreshold, warningPercent: s.warningPercent, overduePercent: s.overduePercent, periodicAdvanceDays: v.clamp(1, 30)));
               }),
             ],
           ],
@@ -275,6 +259,7 @@ class _ReminderSettingsPageState extends ConsumerState<ReminderSettingsPage> {
             'remainingThreshold': local.remainingThreshold,
             'warningPercent': local.warningPercent,
             'overduePercent': local.overduePercent,
+            'periodicAdvanceDays': local.periodicAdvanceDays,
           });
         }
       }
@@ -293,11 +278,13 @@ class _LocalSetting {
   int remainingThreshold;
   int warningPercent;
   int overduePercent;
+  int periodicAdvanceDays;
 
   _LocalSetting({
     this.enabled = true,
     this.remainingThreshold = 300,
     this.warningPercent = 80,
     this.overduePercent = 100,
+    this.periodicAdvanceDays = 7,
   });
 }

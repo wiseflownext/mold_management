@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/mold_provider.dart';
+import '../../providers/refresh.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/mold.dart';
 import '../../models/usage_record.dart';
@@ -46,7 +47,7 @@ class _MoldDetailPageState extends ConsumerState<MoldDetailPage>
     super.dispose();
   }
 
-  void _refresh() => ref.invalidate(moldDetailProvider(widget.id));
+  void _refresh() => refreshAfterMoldChange(ref, moldId: widget.id);
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class _MoldDetailPageState extends ConsumerState<MoldDetailPage>
                 isAdmin: isAdmin,
                 onRefresh: _refresh,
                 onDeleteSuccess: () {
-                  ref.invalidate(moldListNotifierProvider);
+                  refreshAfterMoldChange(ref);
                   if (context.mounted) context.go('/molds');
                 },
               ),
@@ -166,7 +167,9 @@ class _Header extends StatelessWidget {
                   icon: const Icon(Icons.more_horiz, color: Colors.white, size: 24),
                   color: Colors.white,
                   onSelected: (v) async {
-                    if (v == 'status') {
+                    if (v == 'edit') {
+                      context.push('/edit-mold?id=${mold.id}');
+                    } else if (v == 'status') {
                       showModalBottomSheet(
                         context: context,
                         builder: (ctx) => StatusChangeSheet(
@@ -198,6 +201,7 @@ class _Header extends StatelessWidget {
                     }
                   },
                   itemBuilder: (ctx) => [
+                    const PopupMenuItem(value: 'edit', child: Text('编辑信息')),
                     const PopupMenuItem(value: 'status', child: Text('变更状态')),
                     const PopupMenuItem(value: 'cert', child: Text('上传鉴定报告')),
                     const PopupMenuItem(value: 'delete', child: Text('删除模具', style: TextStyle(color: Color(0xFFEF4444)))),
@@ -227,11 +231,19 @@ class _BasicInfoCard extends StatelessWidget {
     final usageCount = mold.usageCount ?? 0;
     final lifePercent = designLife > 0 ? (usageCount / designLife * 100).clamp(0.0, 100.0) : 0.0;
     final maintCycle = mold.maintenanceCycle ?? 0;
-    final remainingUses = maintCycle > 0 ? maintCycle - (usageCount % maintCycle) : 0;
+    final sinceLastMaint = mold.sinceLastMaintenance;
+    final maintRemaining = maintCycle > 0 ? maintCycle - sinceLastMaint : 0;
 
     Color progressColor = _primary;
     if (lifePercent > 80) progressColor = const Color(0xFFEF4444);
     else if (lifePercent > 60) progressColor = const Color(0xFFF59E0B);
+
+    Color maintColor = const Color(0xFF22C55E);
+    if (maintCycle > 0) {
+      final ratio = sinceLastMaint / maintCycle;
+      if (ratio >= 1.0) maintColor = const Color(0xFFEF4444);
+      else if (ratio >= 0.8) maintColor = const Color(0xFFF59E0B);
+    }
 
     return Container(
       padding: const EdgeInsets.all(18),
@@ -271,37 +283,99 @@ class _BasicInfoCard extends StatelessWidget {
               Expanded(child: _InfoCell(label: '保养周期', value: '$maintCycle 次')),
             ],
           ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(child: _InfoCell(label: '模腔数', value: '${mold.cavityCount}')),
+              Expanded(child: _InfoCell(label: '累计产出', value: '${usageCount * mold.cavityCount} 件')),
+              Expanded(child: _InfoCell(label: '累计保养', value: '${mold.totalMaintenanceCount} 次')),
+            ],
+          ),
           if (designLife > 0) ...[
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('使用寿命', style: TextStyle(fontSize: 12, color: Color(0xFF6B7280), fontWeight: FontWeight.w500)),
-                Text(
-                  '${lifePercent.toStringAsFixed(1)}%',
-                  style: TextStyle(fontSize: 12, color: progressColor, fontWeight: FontWeight.w600),
-                ),
-              ],
+            _LifeProgressBar(label: '使用寿命', current: usageCount, total: designLife, color: progressColor),
+            const SizedBox(height: 12),
+            if (maintCycle > 0)
+              _LifeProgressBar(
+                label: '按次保养',
+                current: sinceLastMaint,
+                total: maintCycle,
+                color: maintColor,
+                suffix: maintRemaining > 0
+                    ? '距保养还剩 $maintRemaining 次${mold.lastMaintenanceDate != null ? '  上次: ${mold.lastMaintenanceDate}' : ''}'
+                    : '已超期 ${-maintRemaining} 次，请及时保养',
             ),
-            const SizedBox(height: 6),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(999),
-              child: LinearProgressIndicator(
-                value: lifePercent / 100,
-                minHeight: 8,
-                backgroundColor: const Color(0xFFE5E7EB),
-                valueColor: AlwaysStoppedAnimation(progressColor),
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              '距下次保养: $remainingUses 次',
-              style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF)),
-            ),
+            if (mold.periodicMaintenanceDays != null && mold.periodicMaintenanceDays! > 0) ...[
+              const SizedBox(height: 12),
+              Builder(builder: (_) {
+                final days = mold.daysSinceLastMaintenance ?? 0;
+                final period = mold.periodicMaintenanceDays!;
+                final remain = period - days;
+                Color c = const Color(0xFF22C55E);
+                if (remain <= 0) c = const Color(0xFFEF4444);
+                else if (days >= period * 0.8) c = const Color(0xFFF59E0B);
+                return _LifeProgressBar(
+                  label: '定期保养',
+                  current: days,
+                  total: period,
+                  color: c,
+                  unit: '天',
+                  suffix: remain > 0
+                      ? '距保养还剩 $remain 天${mold.lastMaintenanceDate != null ? '  上次: ${mold.lastMaintenanceDate}' : ''}'
+                      : '已超期 ${-remain} 天，请及时保养',
+                );
+              }),
+            ],
           ],
         ],
       ),
     );
+  }
+}
+
+class _LifeProgressBar extends StatelessWidget {
+  const _LifeProgressBar({required this.label, required this.current, required this.total, required this.color, this.suffix, this.unit = '次'});
+  final String label;
+  final int current;
+  final int total;
+  final Color color;
+  final String? suffix;
+  final String unit;
+
+  @override
+  Widget build(BuildContext context) {
+    final pct = total > 0 ? (current / total * 100).clamp(0.0, 100.0) : 0.0;
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(children: [
+        Text(label, style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280), fontWeight: FontWeight.w500)),
+        const Spacer(),
+        Text('$current / $total $unit', style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w600)),
+        const SizedBox(width: 6),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+          decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(4)),
+          child: Text('${pct.toStringAsFixed(1)}%', style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w700)),
+        ),
+      ]),
+      const SizedBox(height: 6),
+      Stack(children: [
+        Container(height: 10, decoration: BoxDecoration(color: const Color(0xFFF3F4F6), borderRadius: BorderRadius.circular(5))),
+        FractionallySizedBox(
+          widthFactor: (pct / 100).clamp(0.0, 1.0),
+          child: Container(
+            height: 10,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [color.withValues(alpha: 0.7), color]),
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        ),
+      ]),
+      if (suffix != null) ...[
+        const SizedBox(height: 4),
+        Text(suffix!, style: const TextStyle(fontSize: 11, color: Color(0xFF9CA3AF))),
+      ],
+    ]);
   }
 }
 
@@ -366,8 +440,9 @@ class _ProductsCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (p.customer != null) Text('客户: ${p.customer}', style: const TextStyle(fontSize: 13, color: Color(0xFF374151)), maxLines: 1, overflow: TextOverflow.ellipsis),
                       if (p.name != null) Text('产品: ${p.name}', style: const TextStyle(fontSize: 13, color: Color(0xFF111827), fontWeight: FontWeight.w500), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      if (p.customer != null) Text('客户: ${p.customer}', style: const TextStyle(fontSize: 13, color: Color(0xFF374151)), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      if (p.model != null) Text('车型: ${p.model}', style: const TextStyle(fontSize: 13, color: Color(0xFF374151)), maxLines: 1, overflow: TextOverflow.ellipsis),
                       if (p.partNumber != null) Text('零件号: ${p.partNumber}', style: const TextStyle(fontSize: 13, color: Color(0xFF6B7280)), maxLines: 1, overflow: TextOverflow.ellipsis),
                     ],
                   ),
@@ -412,7 +487,7 @@ class _RecordsCard extends StatelessWidget {
             child: TabBarView(
               controller: tabController,
               children: [
-                _UsageRecordsList(records: mold.usageRecords, isAdmin: isAdmin, onDeleted: onRefresh),
+                _UsageRecordsList(records: mold.usageRecords, cavityCount: mold.cavityCount, isAdmin: isAdmin, onDeleted: onRefresh),
                 _MaintenanceRecordsList(records: mold.maintenanceRecords, isAdmin: isAdmin, onDeleted: onRefresh),
               ],
             ),
@@ -424,9 +499,10 @@ class _RecordsCard extends StatelessWidget {
 }
 
 class _UsageRecordsList extends StatelessWidget {
-  const _UsageRecordsList({required this.records, required this.isAdmin, required this.onDeleted});
+  const _UsageRecordsList({required this.records, required this.cavityCount, required this.isAdmin, required this.onDeleted});
 
   final List<UsageRecord> records;
+  final int cavityCount;
   final bool isAdmin;
   final VoidCallback onDeleted;
 
@@ -496,7 +572,12 @@ class _UsageRecordsList extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    Text('${r.product ?? '-'} x ${r.quantity ?? 0}', style: const TextStyle(fontSize: 13, color: Color(0xFF374151)), maxLines: 1, overflow: TextOverflow.ellipsis),
+                    Text(
+                      cavityCount > 1
+                          ? '${r.product ?? '-'} x ${r.quantity ?? 0} (产出${(r.quantity ?? 0) * cavityCount}件)'
+                          : '${r.product ?? '-'} x ${r.quantity ?? 0}',
+                      style: const TextStyle(fontSize: 13, color: Color(0xFF374151)), maxLines: 1, overflow: TextOverflow.ellipsis,
+                    ),
                     Text('操作人: $opName', style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280)), maxLines: 1, overflow: TextOverflow.ellipsis),
                   ],
                 ),
@@ -641,59 +722,43 @@ class _BottomButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final disabled = mold.status == 'SCRAPPED';
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
       decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.06), blurRadius: 8, offset: const Offset(0, -2))]),
       child: SafeArea(
         top: false,
-        child: _buildButtons(context),
+        child: Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                onPressed: disabled ? null : () => context.push('/add-usage-for?moldId=${mold.id}'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: _primary,
+                  side: BorderSide(color: disabled ? const Color(0xFFD1D5DB) : _primary),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text('新增使用记录'),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: disabled ? null : () => context.push('/add-maintenance?moldId=${mold.id}'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: disabled ? const Color(0xFFD1D5DB) : _primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  elevation: 0,
+                ),
+                child: const Text('新增维保记录'),
+              ),
+            ),
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget _buildButtons(BuildContext context) {
-    final isScrapped = mold.status == 'SCRAPPED';
-    final isRepairing = mold.status == 'REPAIRING';
-
-    if (isScrapped) {
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        alignment: Alignment.center,
-        child: const Text('该模具已报废，无法录入记录', style: TextStyle(fontSize: 14, color: Color(0xFF9CA3AF))),
-      );
-    }
-
-    return Row(
-      children: [
-        Expanded(
-          child: OutlinedButton(
-            onPressed: isRepairing
-                ? () => Fluttertoast.showToast(msg: '维修中的模具不能录入使用记录')
-                : () => context.push('/add-usage-for?moldId=${mold.id}'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: isRepairing ? const Color(0xFF9CA3AF) : _primary,
-              side: BorderSide(color: isRepairing ? const Color(0xFFD1D5DB) : _primary),
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            ),
-            child: const Text('新增使用记录'),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: ElevatedButton(
-            onPressed: () => context.push('/add-maintenance?moldId=${mold.id}'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              elevation: 0,
-            ),
-            child: const Text('新增维保记录'),
-          ),
-        ),
-      ],
     );
   }
 }
