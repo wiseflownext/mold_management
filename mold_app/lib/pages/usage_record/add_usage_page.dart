@@ -29,16 +29,18 @@ class _AddUsagePageState extends ConsumerState<AddUsagePage> {
   DateTime _date = DateTime.now();
   final _noteCtrl = TextEditingController();
   final _qtyCtrl = TextEditingController(text: '0');
+  final _prodQtyCtrl = TextEditingController(text: '0');
   bool _loading = false;
   bool _showSuccess = false;
+  bool _syncingQty = false;
+
+  int get _cavityCount => _mold?.cavityCount ?? 1;
 
   @override
   void initState() {
     super.initState();
-    _qtyCtrl.addListener(() {
-      final v = int.tryParse(_qtyCtrl.text) ?? 0;
-      if (_quantity != v) setState(() => _quantity = v);
-    });
+    _qtyCtrl.addListener(_onMoldQtyChanged);
+    _prodQtyCtrl.addListener(_onProdQtyChanged);
     if (widget.moldId != null && widget.moldId!.isNotEmpty) {
       MoldService.instance.getDetail(widget.moldId!).then((m) {
         if (mounted) {
@@ -51,10 +53,30 @@ class _AddUsagePageState extends ConsumerState<AddUsagePage> {
     }
   }
 
+  void _onMoldQtyChanged() {
+    if (_syncingQty) return;
+    final v = int.tryParse(_qtyCtrl.text) ?? 0;
+    if (_quantity != v) setState(() => _quantity = v);
+    _syncingQty = true;
+    _prodQtyCtrl.text = (v * _cavityCount).toString();
+    _syncingQty = false;
+  }
+
+  void _onProdQtyChanged() {
+    if (_syncingQty) return;
+    final pv = int.tryParse(_prodQtyCtrl.text) ?? 0;
+    final moldQty = _cavityCount > 0 ? (pv / _cavityCount).ceil() : pv;
+    _syncingQty = true;
+    _qtyCtrl.text = moldQty.toString();
+    setState(() => _quantity = moldQty);
+    _syncingQty = false;
+  }
+
   @override
   void dispose() {
     _noteCtrl.dispose();
     _qtyCtrl.dispose();
+    _prodQtyCtrl.dispose();
     super.dispose();
   }
 
@@ -67,6 +89,7 @@ class _AddUsagePageState extends ConsumerState<AddUsagePage> {
       _date = DateTime.now();
       _noteCtrl.clear();
       _qtyCtrl.text = '0';
+      _prodQtyCtrl.text = '0';
       _showSuccess = false;
     });
   }
@@ -184,9 +207,9 @@ class _AddUsagePageState extends ConsumerState<AddUsagePage> {
                   ),
                 )),
                 const SizedBox(height: 12),
-                _card('生产数量', true, Row(children: [
+                _card('模具次数', true, Row(children: [
                   _stepBtn(Icons.remove, () {
-                    final v = (_quantity - 10).clamp(0, 999999);
+                    final v = (_quantity - 1).clamp(0, 999999);
                     _qtyCtrl.text = v.toString();
                   }),
                   const SizedBox(width: 8),
@@ -197,11 +220,32 @@ class _AddUsagePageState extends ConsumerState<AddUsagePage> {
                     style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
                     decoration: const InputDecoration(border: InputBorder.none),
                   )),
-                  const Text('次', style: TextStyle(fontSize: 15, color: Color(0xFF6B7280))),
+                  const Text('模次', style: TextStyle(fontSize: 15, color: Color(0xFF6B7280))),
                   const SizedBox(width: 8),
                   _stepBtn(Icons.add, () {
-                    final v = _quantity + 10;
+                    final v = _quantity + 1;
                     _qtyCtrl.text = v.toString();
+                  }),
+                ])),
+                const SizedBox(height: 12),
+                _card('产品数量${_cavityCount > 1 ? ' (模腔数=$_cavityCount)' : ''}', false, Row(children: [
+                  _stepBtn(Icons.remove, () {
+                    final pv = ((int.tryParse(_prodQtyCtrl.text) ?? 0) - _cavityCount).clamp(0, 9999999);
+                    _prodQtyCtrl.text = pv.toString();
+                  }),
+                  const SizedBox(width: 8),
+                  Expanded(child: TextField(
+                    controller: _prodQtyCtrl,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+                    decoration: const InputDecoration(border: InputBorder.none),
+                  )),
+                  const Text('件', style: TextStyle(fontSize: 15, color: Color(0xFF6B7280))),
+                  const SizedBox(width: 8),
+                  _stepBtn(Icons.add, () {
+                    final pv = (int.tryParse(_prodQtyCtrl.text) ?? 0) + _cavityCount;
+                    _prodQtyCtrl.text = pv.toString();
                   }),
                 ])),
                 const SizedBox(height: 12),

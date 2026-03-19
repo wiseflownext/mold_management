@@ -26,7 +26,7 @@ class ProfilePage extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildHeader(context, initial, user.name, isAdmin, user.workshop),
+            _buildHeader(context, initial, user.name, isAdmin, user.workshop, user.companyName),
             const SizedBox(height: 16),
             _buildMenuCard(context, isAdmin),
             const SizedBox(height: 16),
@@ -44,6 +44,7 @@ class ProfilePage extends ConsumerWidget {
     String name,
     bool isAdmin,
     String? workshop,
+    String? companyName,
   ) {
     return Container(
       width: double.infinity,
@@ -119,6 +120,26 @@ class ProfilePage extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.white.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ],
+                    if (companyName != null && companyName.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          companyName,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],

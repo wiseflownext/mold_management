@@ -12,7 +12,8 @@ export class ReportService {
   }
 
   async exportUsageCSV(moldId?: number, startDate?: string, endDate?: string): Promise<string> {
-    const where: any = {};
+    const companyId = this.prisma.requireCompanyId();
+    const where: any = { companyId };
     if (moldId) where.moldId = moldId;
     if (startDate || endDate) {
       where.recordDate = {};
@@ -36,7 +37,8 @@ export class ReportService {
   }
 
   async exportMaintenanceCSV(moldId?: number, startDate?: string, endDate?: string): Promise<string> {
-    const where: any = {};
+    const companyId = this.prisma.requireCompanyId();
+    const where: any = { companyId };
     if (moldId) where.moldId = moldId;
     if (startDate || endDate) {
       where.recordDate = {};
@@ -60,7 +62,9 @@ export class ReportService {
   }
 
   async exportMoldLedgerCSV(): Promise<string> {
+    const companyId = this.prisma.requireCompanyId();
     const molds = await this.prisma.mold.findMany({
+      where: { companyId },
       include: { workshop: { select: { name: true } }, products: { select: { name: true, customer: true, partNumber: true } } },
       orderBy: { moldNumber: 'asc' },
     });
@@ -78,28 +82,30 @@ export class ReportService {
   }
 
   async getStatistics(startDate?: string, endDate?: string) {
-    const dateFilter: any = {};
+    const companyId = this.prisma.requireCompanyId();
+    const dateFilter: any = { companyId };
     if (startDate || endDate) {
       dateFilter.recordDate = {};
       if (startDate) dateFilter.recordDate.gte = new Date(startDate);
       if (endDate) dateFilter.recordDate.lte = this.endOfDay(endDate);
     }
 
+    const moldWhere = { companyId };
     const [byType, byWorkshop, byMonth, moldCount, usageTotal, maintTotal] = await Promise.all([
-      this.prisma.mold.groupBy({ by: ['type'], _count: true }),
-      this.prisma.mold.groupBy({ by: ['workshopId'], _count: true }),
+      this.prisma.mold.groupBy({ by: ['type'], where: moldWhere, _count: true }),
+      this.prisma.mold.groupBy({ by: ['workshopId'], where: moldWhere, _count: true }),
       this.prisma.usageRecord.groupBy({
         by: ['recordDate'],
         where: dateFilter,
         _sum: { quantity: true },
         _count: true,
       }),
-      this.prisma.mold.count(),
+      this.prisma.mold.count({ where: moldWhere }),
       this.prisma.usageRecord.aggregate({ where: dateFilter, _sum: { quantity: true }, _count: true }),
-      this.prisma.maintenanceRecord.aggregate({ where: dateFilter, _count: true }),
+      this.prisma.maintenanceRecord.aggregate({ where: { companyId, ...(dateFilter.recordDate ? { recordDate: dateFilter.recordDate } : {}) }, _count: true }),
     ]);
 
-    const workshops = await this.prisma.workshop.findMany({ select: { id: true, name: true } });
+    const workshops = await this.prisma.workshop.findMany({ where: { companyId }, select: { id: true, name: true } });
     const wsMap = Object.fromEntries(workshops.map((w) => [w.id, w.name]));
 
     const monthlyMap: Record<string, { quantity: number; count: number }> = {};

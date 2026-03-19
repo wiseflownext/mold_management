@@ -510,8 +510,9 @@ class _TodayCard extends ConsumerWidget {
                 Row(
                   children: [
                     _item('${s.usageRecordCount}', '使用记录'),
-                    _item('${s.totalQuantity}', '生产总量'),
+                    _item('${s.totalQuantity}', '模次'),
                     _item('${s.activeMoldCount}', '活跃模具'),
+                    _item('${s.maintCount}', '保养记录'),
                   ],
                 ),
               ],

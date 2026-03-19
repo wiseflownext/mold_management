@@ -6,28 +6,32 @@ export class WorkshopService {
   constructor(private prisma: PrismaService) {}
 
   async create(name: string) {
-    const exists = await this.prisma.workshop.findUnique({ where: { name } });
+    const companyId = this.prisma.requireCompanyId();
+    const exists = await this.prisma.workshop.findFirst({ where: { companyId, name } });
     if (exists) throw new ConflictException('车间名已存在');
-    return this.prisma.workshop.create({ data: { name } });
+    return this.prisma.workshop.create({ data: { companyId, name } });
   }
 
   findAll() {
-    return this.prisma.workshop.findMany({ orderBy: { createdAt: 'asc' } });
+    const companyId = this.prisma.requireCompanyId();
+    return this.prisma.workshop.findMany({ where: { companyId }, orderBy: { createdAt: 'asc' } });
   }
 
   async update(id: number, name: string) {
-    const ws = await this.prisma.workshop.findUnique({ where: { id } });
+    const companyId = this.prisma.requireCompanyId();
+    const ws = await this.prisma.workshop.findFirst({ where: { id, companyId } });
     if (!ws) throw new NotFoundException('车间不存在');
     return this.prisma.workshop.update({ where: { id }, data: { name } });
   }
 
   async remove(id: number) {
-    const ws = await this.prisma.workshop.findUnique({ where: { id } });
+    const companyId = this.prisma.requireCompanyId();
+    const ws = await this.prisma.workshop.findFirst({ where: { id, companyId } });
     if (!ws) throw new NotFoundException('车间不存在');
 
     const [moldCount, userCount] = await Promise.all([
-      this.prisma.mold.count({ where: { workshopId: id } }),
-      this.prisma.user.count({ where: { workshopId: id } }),
+      this.prisma.mold.count({ where: { workshopId: id, companyId } }),
+      this.prisma.user.count({ where: { workshopId: id, companyId } }),
     ]);
 
     if (moldCount > 0) throw new ConflictException(`该车间下有 ${moldCount} 个模具，无法删除`);

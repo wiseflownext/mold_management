@@ -11,20 +11,31 @@ export class ReminderService {
   ) {}
 
   async findAll() {
-    return this.prisma.reminderSetting.findMany();
+    const companyId = this.prisma.requireCompanyId();
+    return this.prisma.reminderSetting.findMany({ where: { companyId } });
   }
 
   async update(id: number, data: any) {
+    const companyId = this.prisma.requireCompanyId();
+    const setting = await this.prisma.reminderSetting.findFirst({ where: { id, companyId } });
+    if (!setting) throw new Error('设置不存在');
     return this.prisma.reminderSetting.update({ where: { id }, data });
   }
 
   @Cron('0 8 * * *')
   async checkMaintenanceReminders() {
-    const settings = await this.prisma.reminderSetting.findMany({ where: { enabled: true } });
+    const companies = await this.prisma.company.findMany({ where: { isActive: true }, select: { id: true } });
+    for (const company of companies) {
+      await this.checkRemindersForCompany(company.id);
+    }
+  }
+
+  private async checkRemindersForCompany(companyId: number) {
+    const settings = await this.prisma.reminderSetting.findMany({ where: { companyId, enabled: true } });
     if (!settings.length) return;
 
     const molds = await this.prisma.mold.findMany({
-      where: { status: { in: ['IN_USE', 'REPAIRING'] } },
+      where: { companyId, status: { in: ['IN_USE', 'REPAIRING'] } },
       select: { id: true, moldNumber: true, type: true, usageCount: true, maintenanceCycle: true, designLife: true, periodicMaintenanceDays: true, firstUseDate: true },
     });
 
@@ -37,9 +48,9 @@ export class ReminderService {
       const ratio = (sinceLastMaint / cycle) * 100;
 
       if (ratio >= setting.overduePercent) {
-        await this.sendDailyAlert(mold.id, 'MAINTENANCE_OVERDUE', '按次保养超期', `模具 ${mold.moldNumber} 已超周期 ${sinceLastMaint}/${cycle} 次，请及时保养`);
+        await this.sendDailyAlert(companyId, mold.id, 'MAINTENANCE_OVERDUE', '按次保养超期', `模具 ${mold.moldNumber} 已超周期 ${sinceLastMaint}/${cycle} 次，请及时保养`);
       } else if (ratio >= setting.warningPercent) {
-        await this.sendDailyAlert(mold.id, 'MAINTENANCE_SOON', '按次保养预警', `模具 ${mold.moldNumber} 使用 ${sinceLastMaint}/${cycle} 次，即将到期`);
+        await this.sendDailyAlert(companyId, mold.id, 'MAINTENANCE_SOON', '按次保养预警', `模具 ${mold.moldNumber} 使用 ${sinceLastMaint}/${cycle} 次，即将到期`);
       }
 
       if (mold.periodicMaintenanceDays) {
@@ -47,17 +58,17 @@ export class ReminderService {
         const advDays = (setting as any).periodicAdvanceDays ?? 7;
         const daysLeft = mold.periodicMaintenanceDays - daysSince;
         if (daysLeft <= 0) {
-          await this.sendDailyAlert(mold.id, 'MAINTENANCE_OVERDUE', '定期保养超期', `模具 ${mold.moldNumber} 已超 ${-daysLeft} 天未保养，请立即保养`);
+          await this.sendDailyAlert(companyId, mold.id, 'MAINTENANCE_OVERDUE', '定期保养超期', `模具 ${mold.moldNumber} 已超 ${-daysLeft} 天未保养，请立即保养`);
         } else if (daysLeft <= advDays) {
-          await this.sendDailyAlert(mold.id, 'MAINTENANCE_SOON', '定期保养预警', `模具 ${mold.moldNumber} 距定期保养还剩 ${daysLeft} 天`);
+          await this.sendDailyAlert(companyId, mold.id, 'MAINTENANCE_SOON', '定期保养预警', `模具 ${mold.moldNumber} 距定期保养还剩 ${daysLeft} 天`);
         }
       }
 
       const life = mold.designLife || 20000;
       if (mold.usageCount >= life) {
-        await this.sendDailyAlert(mold.id, 'LIFE_EXCEEDED', '模具寿命超限', `模具 ${mold.moldNumber} 累计 ${mold.usageCount}/${life} 次`);
+        await this.sendDailyAlert(companyId, mold.id, 'LIFE_EXCEEDED', '模具寿命超限', `模具 ${mold.moldNumber} 累计 ${mold.usageCount}/${life} 次`);
       } else if (mold.usageCount >= life * 0.9) {
-        await this.sendDailyAlert(mold.id, 'LIFE_WARNING', '模具寿命预警', `模具 ${mold.moldNumber} 累计 ${mold.usageCount}/${life} 次`);
+        await this.sendDailyAlert(companyId, mold.id, 'LIFE_WARNING', '模具寿命预警', `模具 ${mold.moldNumber} 累计 ${mold.usageCount}/${life} 次`);
       }
     }
   }
@@ -65,44 +76,45 @@ export class ReminderService {
   async checkSingleMold(moldId: number) {
     const mold = await this.prisma.mold.findUnique({
       where: { id: moldId },
-      select: { id: true, moldNumber: true, type: true, usageCount: true, maintenanceCycle: true, designLife: true, status: true, periodicMaintenanceDays: true, firstUseDate: true },
+      select: { id: true, companyId: true, moldNumber: true, type: true, usageCount: true, maintenanceCycle: true, designLife: true, status: true, periodicMaintenanceDays: true, firstUseDate: true },
     });
     if (!mold || !['IN_USE', 'REPAIRING'].includes(mold.status)) return;
 
+    const companyId = mold.companyId;
     const cycle = mold.maintenanceCycle || 5000;
     const life = mold.designLife || 20000;
     const sinceLastMaint = await this.getUsageSinceLastMaintenance(mold.id);
 
     if (sinceLastMaint >= cycle) {
-      await this.sendAlert(mold.id, 'MAINTENANCE_OVERDUE', '按次保养超期', `模具 ${mold.moldNumber} 使用 ${sinceLastMaint}/${cycle} 次`);
+      await this.sendAlert(companyId, mold.id, 'MAINTENANCE_OVERDUE', '按次保养超期', `模具 ${mold.moldNumber} 使用 ${sinceLastMaint}/${cycle} 次`);
     }
 
     if (mold.periodicMaintenanceDays) {
       const daysSince = await this.getDaysSinceLastMaintenance(mold.id, mold.firstUseDate);
       if (daysSince >= mold.periodicMaintenanceDays) {
-        await this.sendAlert(mold.id, 'MAINTENANCE_OVERDUE', '定期保养超期', `模具 ${mold.moldNumber} 已超 ${daysSince - mold.periodicMaintenanceDays} 天未保养`);
+        await this.sendAlert(companyId, mold.id, 'MAINTENANCE_OVERDUE', '定期保养超期', `模具 ${mold.moldNumber} 已超 ${daysSince - mold.periodicMaintenanceDays} 天未保养`);
       }
     }
 
     if (mold.usageCount >= life) {
-      await this.sendAlert(mold.id, 'LIFE_EXCEEDED', '模具寿命超限', `模具 ${mold.moldNumber} 累计 ${mold.usageCount}/${life} 次`);
+      await this.sendAlert(companyId, mold.id, 'LIFE_EXCEEDED', '模具寿命超限', `模具 ${mold.moldNumber} 累计 ${mold.usageCount}/${life} 次`);
     }
   }
 
-  private async sendAlert(moldId: number, type: string, title: string, message: string) {
+  private async sendAlert(companyId: number, moldId: number, type: string, title: string, message: string) {
     const msg = { type: type as any, title, message };
-    await this.notificationService.createForAllAdmins({ ...msg, moldId });
-    await this.notificationService.createForMoldOperators(moldId, msg);
+    await this.notificationService.createForAllAdmins(companyId, { ...msg, moldId });
+    await this.notificationService.createForMoldOperators(companyId, moldId, msg);
   }
 
-  private async sendDailyAlert(moldId: number, type: string, title: string, message: string) {
+  private async sendDailyAlert(companyId: number, moldId: number, type: string, title: string, message: string) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const exists = await this.prisma.notification.findFirst({
-      where: { moldId, type: type as any, createdAt: { gte: today } },
+      where: { moldId, type: type as any, companyId, createdAt: { gte: today } },
     });
     if (exists) return;
-    await this.sendAlert(moldId, type, title, message);
+    await this.sendAlert(companyId, moldId, type, title, message);
   }
 
   private async getDaysSinceLastMaintenance(moldId: number, firstUseDate?: Date | null): Promise<number> {
@@ -134,9 +146,10 @@ export class ReminderService {
   }
 
   async getMaintenanceAlerts() {
-    const settings = await this.prisma.reminderSetting.findMany();
+    const companyId = this.prisma.requireCompanyId();
+    const settings = await this.prisma.reminderSetting.findMany({ where: { companyId } });
     const molds = await this.prisma.mold.findMany({
-      where: { status: { in: ['IN_USE', 'REPAIRING'] } },
+      where: { companyId, status: { in: ['IN_USE', 'REPAIRING'] } },
       include: {
         workshop: { select: { name: true } },
         products: { select: { name: true, customer: true }, take: 1 },

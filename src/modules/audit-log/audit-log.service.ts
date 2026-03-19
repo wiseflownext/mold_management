@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 
 export interface AuditPayload {
+  companyId: number;
   userId: number;
   userName: string;
   action: string;
@@ -20,9 +21,10 @@ export class AuditLogService {
   }
 
   findAll(query: { page?: number; pageSize?: number; action?: string; targetType?: string }) {
+    const companyId = this.prisma.requireCompanyId();
     const page = Number(query.page) || 1;
     const pageSize = Number(query.pageSize) || 20;
-    const where: any = {};
+    const where: any = { companyId };
     if (query.action) where.action = query.action;
     if (query.targetType) where.targetType = query.targetType;
 

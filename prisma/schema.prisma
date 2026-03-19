@@ -7,24 +7,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Company {
   id        Int      @id @default(autoincrement())
-  username  String   @unique @db.VarChar(50)
-  name      String   @db.VarChar(50)
-  phone     String?  @unique @db.VarChar(20)
-  password  String   @db.VarChar(255)
-  role      UserRole @default(operator)
-  workshopId Int?    @map("workshop_id")
-  workshop  Workshop? @relation(fields: [workshopId], references: [id], onDelete: SetNull)
-  lastLogin DateTime? @map("last_login")
+  name      String   @db.VarChar(100)
+  code      String   @unique @db.VarChar(50)
+  isActive  Boolean  @default(true) @map("is_active")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  usageRecords      UsageRecord[]
-  maintenanceRecords MaintenanceRecord[]
-  certificationLogs CertificationLog[]
-  notifications     Notification[]
+  users            User[]
+  workshops        Workshop[]
+  molds            Mold[]
+  reminderSettings ReminderSetting[]
+  auditLogs        AuditLog[]
 
+  @@map("companies")
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  username   String    @db.VarChar(50)
+  name       String    @db.VarChar(50)
+  phone      String?   @db.VarChar(20)
+  password   String    @db.VarChar(255)
+  role       UserRole  @default(operator)
+  companyId  Int       @map("company_id")
+  company    Company   @relation(fields: [companyId], references: [id])
+  workshopId Int?      @map("workshop_id")
+  workshop   Workshop? @relation(fields: [workshopId], references: [id], onDelete: SetNull)
+  lastLogin  DateTime? @map("last_login")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  usageRecords       UsageRecord[]
+  maintenanceRecords MaintenanceRecord[]
+  certificationLogs  CertificationLog[]
+  notifications      Notification[]
+
+  @@unique([companyId, username])
   @@map("users")
 }
 
@@ -35,7 +55,9 @@ enum UserRole {
 
 model Workshop {
   id        Int      @id @default(autoincrement())
-  name      String   @unique @db.VarChar(50)
+  companyId Int      @map("company_id")
+  company   Company  @relation(fields: [companyId], references: [id])
+  name      String   @db.VarChar(50)
   isDefault Boolean  @default(false) @map("is_default")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -43,24 +65,27 @@ model Workshop {
   users User[]
   molds Mold[]
 
+  @@unique([companyId, name])
   @@map("workshops")
 }
 
 model Mold {
-  id               Int        @id @default(autoincrement())
-  moldNumber       String     @unique @map("mold_number") @db.VarChar(50)
-  type             MoldType
-  workshopId       Int?       @map("workshop_id")
-  workshop         Workshop?  @relation(fields: [workshopId], references: [id], onDelete: SetNull)
-  firstUseDate     DateTime?  @map("first_use_date") @db.Date
-  designLife       Int        @default(20000) @map("design_life")
-  maintenanceCycle Int        @default(5000) @map("maintenance_cycle")
-  periodicMaintenanceDays Int? @map("periodic_maintenance_days")
-  cavityCount      Int        @default(1) @map("cavity_count")
-  usageCount       Int        @default(0) @map("usage_count")
-  status           MoldStatus @default(IN_USE)
-  createdAt        DateTime   @default(now()) @map("created_at")
-  updatedAt        DateTime   @updatedAt @map("updated_at")
+  id                      Int        @id @default(autoincrement())
+  companyId               Int        @map("company_id")
+  company                 Company    @relation(fields: [companyId], references: [id])
+  moldNumber              String     @map("mold_number") @db.VarChar(50)
+  type                    MoldType
+  workshopId              Int?       @map("workshop_id")
+  workshop                Workshop?  @relation(fields: [workshopId], references: [id], onDelete: SetNull)
+  firstUseDate            DateTime?  @map("first_use_date") @db.Date
+  designLife              Int        @default(20000) @map("design_life")
+  maintenanceCycle        Int        @default(5000) @map("maintenance_cycle")
+  periodicMaintenanceDays Int?       @map("periodic_maintenance_days")
+  cavityCount             Int        @default(1) @map("cavity_count")
+  usageCount              Int        @default(0) @map("usage_count")
+  status                  MoldStatus @default(IN_USE)
+  createdAt               DateTime   @default(now()) @map("created_at")
+  updatedAt               DateTime   @updatedAt @map("updated_at")
 
   products           MoldProduct[]
   usageRecords       UsageRecord[]
@@ -68,8 +93,9 @@ model Mold {
   certificationLogs  CertificationLog[]
   notifications      Notification[]
 
-  @@index([status])
-  @@index([type])
+  @@unique([companyId, moldNumber])
+  @@index([companyId, status])
+  @@index([companyId, type])
   @@map("molds")
 }
 
@@ -80,20 +106,20 @@ enum MoldType {
 }
 
 enum MoldStatus {
-  IN_USE     @map("在用")
-  REPAIRING  @map("维修中")
-  STOPPED    @map("停用")
-  SCRAPPED   @map("报废")
+  IN_USE    @map("在用")
+  REPAIRING @map("维修中")
+  STOPPED   @map("停用")
+  SCRAPPED  @map("报废")
 }
 
 model MoldProduct {
-  id         Int     @id @default(autoincrement())
-  moldId     Int     @map("mold_id")
-  mold       Mold    @relation(fields: [moldId], references: [id], onDelete: Cascade)
-  customer   String? @db.VarChar(100)
-  model      String? @db.VarChar(50)
-  name       String  @db.VarChar(200)
-  partNumber String? @map("part_number") @db.VarChar(50)
+  id         Int      @id @default(autoincrement())
+  moldId     Int      @map("mold_id")
+  mold       Mold     @relation(fields: [moldId], references: [id], onDelete: Cascade)
+  customer   String?  @db.VarChar(100)
+  model      String?  @db.VarChar(50)
+  name       String   @db.VarChar(200)
+  partNumber String?  @map("part_number") @db.VarChar(50)
   createdAt  DateTime @default(now()) @map("created_at")
 
   @@index([moldId])
@@ -102,6 +128,7 @@ model MoldProduct {
 
 model UsageRecord {
   id         Int      @id @default(autoincrement())
+  companyId  Int      @map("company_id")
   moldId     Int      @map("mold_id")
   mold       Mold     @relation(fields: [moldId], references: [id], onDelete: Cascade)
   product    String   @db.VarChar(200)
@@ -115,7 +142,7 @@ model UsageRecord {
 
   @@index([moldId])
   @@index([operatorId])
-  @@index([recordDate])
+  @@index([companyId, recordDate])
   @@map("usage_records")
 }
 
@@ -127,6 +154,7 @@ enum Shift {
 
 model MaintenanceRecord {
   id         Int             @id @default(autoincrement())
+  companyId  Int             @map("company_id")
   moldId     Int             @map("mold_id")
   mold       Mold            @relation(fields: [moldId], references: [id], onDelete: Cascade)
   type       MaintenanceType
@@ -137,7 +165,7 @@ model MaintenanceRecord {
   createdAt  DateTime        @default(now()) @map("created_at")
 
   @@index([moldId])
-  @@index([recordDate])
+  @@index([companyId, recordDate])
   @@index([operatorId])
   @@map("maintenance_records")
 }
@@ -148,21 +176,22 @@ enum MaintenanceType {
 }
 
 model CertificationLog {
-  id             Int    @id @default(autoincrement())
-  moldId         Int    @map("mold_id")
-  mold           Mold   @relation(fields: [moldId], references: [id], onDelete: Cascade)
-  oldDesignLife  Int    @map("old_design_life")
-  newDesignLife  Int    @map("new_design_life")
-  reportUrl      String @map("report_url") @db.VarChar(500)
-  operatorId     Int    @map("operator_id")
-  operator       User   @relation(fields: [operatorId], references: [id])
-  createdAt      DateTime @default(now()) @map("created_at")
+  id            Int      @id @default(autoincrement())
+  moldId        Int      @map("mold_id")
+  mold          Mold     @relation(fields: [moldId], references: [id], onDelete: Cascade)
+  oldDesignLife Int      @map("old_design_life")
+  newDesignLife Int      @map("new_design_life")
+  reportUrl     String   @map("report_url") @db.VarChar(500)
+  operatorId    Int      @map("operator_id")
+  operator      User     @relation(fields: [operatorId], references: [id])
+  createdAt     DateTime @default(now()) @map("created_at")
 
   @@map("certification_logs")
 }
 
 model Notification {
   id        Int              @id @default(autoincrement())
+  companyId Int              @map("company_id")
   userId    Int              @map("user_id")
   user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   type      NotificationType
@@ -173,7 +202,7 @@ model Notification {
   isRead    Boolean          @default(false) @map("is_read")
   createdAt DateTime         @default(now()) @map("created_at")
 
-  @@index([userId, isRead])
+  @@index([companyId, userId, isRead])
   @@index([createdAt])
   @@map("notifications")
 }
@@ -189,6 +218,8 @@ enum NotificationType {
 
 model AuditLog {
   id         Int      @id @default(autoincrement())
+  companyId  Int      @map("company_id")
+  company    Company  @relation(fields: [companyId], references: [id])
   userId     Int      @map("user_id")
   userName   String   @map("user_name") @db.VarChar(50)
   action     String   @db.VarChar(50)
@@ -198,20 +229,23 @@ model AuditLog {
   ip         String?  @db.VarChar(50)
   createdAt  DateTime @default(now()) @map("created_at")
 
-  @@index([createdAt])
+  @@index([companyId, createdAt])
   @@index([userId])
   @@map("audit_logs")
 }
 
 model ReminderSetting {
-  id                    Int      @id @default(autoincrement())
-  moldType              MoldType @unique @map("mold_type")
-  enabled               Boolean  @default(true)
-  remainingThreshold    Int      @default(300) @map("remaining_threshold")
-  warningPercent        Int      @default(80) @map("warning_percent")
-  overduePercent        Int      @default(100) @map("overdue_percent")
-  periodicAdvanceDays   Int      @default(7) @map("periodic_advance_days")
-  updatedAt             DateTime @updatedAt @map("updated_at")
+  id                  Int      @id @default(autoincrement())
+  companyId           Int      @map("company_id")
+  company             Company  @relation(fields: [companyId], references: [id])
+  moldType            MoldType @map("mold_type")
+  enabled             Boolean  @default(true)
+  remainingThreshold  Int      @default(300) @map("remaining_threshold")
+  warningPercent      Int      @default(80) @map("warning_percent")
+  overduePercent      Int      @default(100) @map("overdue_percent")
+  periodicAdvanceDays Int      @default(7) @map("periodic_advance_days")
+  updatedAt           DateTime @updatedAt @map("updated_at")
 
+  @@unique([companyId, moldType])
   @@map("reminder_settings")
 }

@@ -16,7 +16,7 @@ export class MoldController {
   @Roles('admin')
   async create(@Body() dto: CreateMoldDto, @CurrentUser() user: any, @Req() req: any) {
     const mold = await this.moldService.create(dto);
-    this.audit.log({ userId: user.id, userName: user.name, action: 'CREATE', targetType: 'mold', targetId: mold.id, detail: `新增模具 ${dto.moldNumber}`, ip: req.ip }).catch(() => {});
+    this.audit.log({ companyId: user.companyId, userId: user.id, userName: user.name, action: 'CREATE', targetType: 'mold', targetId: mold.id, detail: `新增模具 ${dto.moldNumber}`, ip: req.ip }).catch(() => {});
     return mold;
   }
 
@@ -50,9 +50,9 @@ export class MoldController {
   ) {
     const result = await this.moldService.update(id, dto);
     if (dto.status) {
-      this.audit.log({ userId: user.id, userName: user.name, action: 'STATUS_CHANGE', targetType: 'mold', targetId: id, detail: `状态变更为 ${dto.status}`, ip: req.ip });
+      this.audit.log({ companyId: user.companyId, userId: user.id, userName: user.name, action: 'STATUS_CHANGE', targetType: 'mold', targetId: id, detail: `状态变更为 ${dto.status}`, ip: req.ip });
     } else {
-      this.audit.log({ userId: user.id, userName: user.name, action: 'UPDATE', targetType: 'mold', targetId: id, detail: `编辑模具信息`, ip: req.ip }).catch(() => {});
+      this.audit.log({ companyId: user.companyId, userId: user.id, userName: user.name, action: 'UPDATE', targetType: 'mold', targetId: id, detail: `编辑模具信息`, ip: req.ip }).catch(() => {});
     }
     return result;
   }
@@ -72,7 +72,7 @@ export class MoldController {
   async remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: any, @Req() req: any) {
     const mold = await this.moldService.findOne(id);
     await this.moldService.remove(id);
-    this.audit.log({ userId: user.id, userName: user.name, action: 'DELETE', targetType: 'mold', targetId: id, detail: `删除模具 ${mold.moldNumber}`, ip: req.ip });
+    this.audit.log({ companyId: user.companyId, userId: user.id, userName: user.name, action: 'DELETE', targetType: 'mold', targetId: id, detail: `删除模具 ${mold.moldNumber}`, ip: req.ip });
   }
 
   @Post(':id/products')

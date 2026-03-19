@@ -15,7 +15,7 @@ export class MaintenanceRecordController {
   @Post()
   async create(@Body() dto: CreateMaintenanceRecordDto, @CurrentUser() user: any, @Req() req: any) {
     const record = await this.service.create(dto, user.id);
-    this.audit.log({ userId: user.id, userName: user.name, action: 'CREATE', targetType: 'maintenance_record', targetId: record.id, detail: `模具ID${dto.moldId} ${dto.type}`, ip: req.ip }).catch(() => {});
+    this.audit.log({ companyId: user.companyId, userId: user.id, userName: user.name, action: 'CREATE', targetType: 'maintenance_record', targetId: record.id, detail: `模具ID${dto.moldId} ${dto.type}`, ip: req.ip }).catch(() => {});
     return record;
   }
 
@@ -28,6 +28,6 @@ export class MaintenanceRecordController {
   @Roles('admin')
   async remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: any, @Req() req: any) {
     await this.service.remove(id);
-    this.audit.log({ userId: user.id, userName: user.name, action: 'DELETE', targetType: 'maintenance_record', targetId: id, ip: req.ip });
+    this.audit.log({ companyId: user.companyId, userId: user.id, userName: user.name, action: 'DELETE', targetType: 'maintenance_record', targetId: id, ip: req.ip });
   }
 }

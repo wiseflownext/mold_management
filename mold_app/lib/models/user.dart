@@ -27,6 +27,8 @@ class User {
   final String username;
   final String name;
   final String role;
+  final int? companyId;
+  final String? companyName;
   final String? workshop;
   final String? workshopId;
   final String? phone;
@@ -38,6 +40,8 @@ class User {
     required this.username,
     required this.name,
     required this.role,
+    this.companyId,
+    this.companyName,
     this.workshop,
     this.workshopId,
     this.phone,
@@ -50,6 +54,8 @@ class User {
         username: json['username'] as String? ?? '',
         name: json['name'] as String? ?? '',
         role: json['role'] as String? ?? '',
+        companyId: json['companyId'] is int ? json['companyId'] as int : null,
+        companyName: json['companyName'] as String?,
         workshop: json['workshop'] is String
             ? json['workshop'] as String?
             : (json['workshop'] is Map ? json['workshop']['name'] as String? : null),
@@ -68,6 +74,8 @@ class User {
         'username': username,
         'name': name,
         'role': role,
+        if (companyId != null) 'companyId': companyId,
+        if (companyName != null) 'companyName': companyName,
         if (workshop != null) 'workshop': workshop,
         if (workshopId != null) 'workshopId': workshopId,
         if (phone != null) 'phone': phone,

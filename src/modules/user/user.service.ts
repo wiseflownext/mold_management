@@ -3,24 +3,31 @@ import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto, UpdateUserDto, QueryUserDto } from './dto/user.dto';
 
-const userSelect = { id: true, username: true, name: true, phone: true, role: true, workshopId: true, workshop: true, lastLogin: true, createdAt: true };
+const userSelect = {
+  id: true, username: true, name: true, phone: true, role: true,
+  companyId: true, workshopId: true, workshop: true, lastLogin: true, createdAt: true,
+};
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateUserDto) {
-    const exists = await this.prisma.user.findUnique({ where: { username: dto.username } });
+    const companyId = this.prisma.requireCompanyId();
+    const exists = await this.prisma.user.findFirst({
+      where: { companyId, username: dto.username },
+    });
     if (exists) throw new ConflictException('用户名已存在');
     return this.prisma.user.create({
-      data: { ...dto, role: dto.role as any, password: await bcrypt.hash(dto.password, 10) },
+      data: { ...dto, companyId, role: dto.role as any, password: await bcrypt.hash(dto.password, 10) },
       select: userSelect,
     });
   }
 
   async findAll(query: QueryUserDto) {
+    const companyId = this.prisma.requireCompanyId();
     const { keyword, role, page = 1, pageSize = 20 } = query;
-    const where: any = {};
+    const where: any = { companyId };
     if (keyword) where.OR = [{ username: { contains: keyword } }, { name: { contains: keyword } }];
     if (role) where.role = role;
 
@@ -32,7 +39,8 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    const user = await this.prisma.user.findUnique({ where: { id }, select: userSelect });
+    const companyId = this.prisma.requireCompanyId();
+    const user = await this.prisma.user.findFirst({ where: { id, companyId }, select: userSelect });
     if (!user) throw new NotFoundException('用户不存在');
     return user;
   }

@@ -45,7 +45,7 @@ export class UserController {
   @Roles('admin')
   async resetPassword(@Param('id', ParseIntPipe) id: number, @Body() dto: ResetPasswordDto, @CurrentUser() user: any, @Req() req: any) {
     await this.service.resetPassword(id, dto.newPassword);
-    this.audit.log({ userId: user.id, userName: user.name, action: 'RESET_PASSWORD', targetType: 'user', targetId: id, ip: req.ip });
+    this.audit.log({ companyId: user.companyId, userId: user.id, userName: user.name, action: 'RESET_PASSWORD', targetType: 'user', targetId: id, ip: req.ip });
   }
 
   @Delete(':id')
@@ -53,6 +53,6 @@ export class UserController {
   async remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: any, @Req() req: any) {
     const target = await this.service.findOne(id);
     await this.service.remove(id);
-    this.audit.log({ userId: user.id, userName: user.name, action: 'DELETE', targetType: 'user', targetId: id, detail: `删除用户 ${target.name}`, ip: req.ip });
+    this.audit.log({ companyId: user.companyId, userId: user.id, userName: user.name, action: 'DELETE', targetType: 'user', targetId: id, detail: `删除用户 ${target.name}`, ip: req.ip });
   }
 }

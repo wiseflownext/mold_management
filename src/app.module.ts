@@ -15,6 +15,7 @@ import { ReportModule } from './modules/report/report.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { AuditLogModule } from './modules/audit-log/audit-log.module';
 import { HomeModule } from './modules/home/home.module';
+import { CompanyModule } from './modules/company/company.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { HomeModule } from './modules/home/home.module';
     UploadModule,
     AuditLogModule,
     HomeModule,
+    CompanyModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

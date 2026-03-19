@@ -7,11 +7,13 @@ export class MaintenanceRecordService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateMaintenanceRecordDto, operatorId: number) {
-    const mold = await this.prisma.mold.findUnique({ where: { id: dto.moldId } });
+    const companyId = this.prisma.requireCompanyId();
+    const mold = await this.prisma.mold.findFirst({ where: { id: dto.moldId, companyId } });
     if (!mold) throw new NotFoundException('模具不存在');
 
     return this.prisma.maintenanceRecord.create({
       data: {
+        companyId,
         moldId: dto.moldId,
         type: dto.type as any,
         content: dto.content,
@@ -23,8 +25,9 @@ export class MaintenanceRecordService {
   }
 
   async findAll(query: QueryMaintenanceRecordDto) {
+    const companyId = this.prisma.requireCompanyId();
     const { moldId, operatorId, type, startDate, endDate, page = 1, pageSize = 20 } = query;
-    const where: any = {};
+    const where: any = { companyId };
     if (moldId) where.moldId = moldId;
     if (operatorId) where.operatorId = operatorId;
     if (type) where.type = type;
@@ -48,7 +51,8 @@ export class MaintenanceRecordService {
   }
 
   async remove(id: number) {
-    const record = await this.prisma.maintenanceRecord.findUnique({ where: { id } });
+    const companyId = this.prisma.requireCompanyId();
+    const record = await this.prisma.maintenanceRecord.findFirst({ where: { id, companyId } });
     if (!record) throw new NotFoundException('记录不存在');
     return this.prisma.maintenanceRecord.delete({ where: { id } });
   }

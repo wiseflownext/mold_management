@@ -13,17 +13,20 @@ class AuthService {
   static const _userKey = 'user';
   static const _accessKey = 'access_token';
   static const _refreshKey = 'refresh_token';
+  static const _companyCodeKey = 'company_code';
 
   final _api = ApiClient.instance;
 
-  Future<LoginResponse> login(String username, String password) async {
+  Future<LoginResponse> login(String companyCode, String username, String password) async {
     final r = await _api.post(ApiConfig.authLogin, {
+      'companyCode': companyCode,
       'username': username,
       'password': password,
     });
     final res = _parseData(r, LoginResponse.fromJson);
     await saveTokens(res.accessToken, res.refreshToken);
     await saveUser(res.user);
+    await _saveCompanyCode(companyCode);
     return res;
   }
 
@@ -85,6 +88,16 @@ class AuthService {
   Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_accessKey)?.isNotEmpty ?? false;
+  }
+
+  Future<String?> getStoredCompanyCode() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_companyCodeKey);
+  }
+
+  Future<void> _saveCompanyCode(String code) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_companyCodeKey, code);
   }
 
   T _parseData<T>(Response r, T Function(Map<String, dynamic>) fromJson) {

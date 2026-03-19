@@ -7,12 +7,14 @@ export class UsageRecordService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateUsageRecordDto, operatorId: number) {
-    const mold = await this.prisma.mold.findUnique({ where: { id: dto.moldId } });
+    const companyId = this.prisma.requireCompanyId();
+    const mold = await this.prisma.mold.findFirst({ where: { id: dto.moldId, companyId } });
     if (!mold) throw new NotFoundException('模具不存在');
 
     const [record] = await this.prisma.$transaction([
       this.prisma.usageRecord.create({
         data: {
+          companyId,
           moldId: dto.moldId,
           product: dto.product,
           quantity: dto.quantity,
@@ -35,8 +37,9 @@ export class UsageRecordService {
   }
 
   async findAll(query: QueryUsageRecordDto) {
+    const companyId = this.prisma.requireCompanyId();
     const { moldId, operatorId, startDate, endDate, page = 1, pageSize = 20 } = query;
-    const where: any = {};
+    const where: any = { companyId };
     if (moldId) where.moldId = moldId;
     if (operatorId) where.operatorId = operatorId;
     if (startDate || endDate) {
@@ -63,7 +66,8 @@ export class UsageRecordService {
   }
 
   async remove(id: number) {
-    const record = await this.prisma.usageRecord.findUnique({ where: { id } });
+    const companyId = this.prisma.requireCompanyId();
+    const record = await this.prisma.usageRecord.findFirst({ where: { id, companyId } });
     if (!record) throw new NotFoundException('记录不存在');
 
     await this.prisma.$transaction([

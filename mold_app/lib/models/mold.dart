@@ -197,22 +197,26 @@ class TodaySummary {
   final int usageRecordCount;
   final int totalQuantity;
   final int activeMoldCount;
+  final int maintCount;
 
   TodaySummary({
     this.usageRecordCount = 0,
     this.totalQuantity = 0,
     this.activeMoldCount = 0,
+    this.maintCount = 0,
   });
 
   factory TodaySummary.fromJson(Map<String, dynamic> json) => TodaySummary(
         usageRecordCount: (json['usageRecordCount'] as num?)?.toInt() ?? (json['recordCount'] as num?)?.toInt() ?? 0,
         totalQuantity: (json['totalQuantity'] as num?)?.toInt() ?? (json['totalProduction'] as num?)?.toInt() ?? 0,
         activeMoldCount: (json['activeMoldCount'] as num?)?.toInt() ?? (json['activeMolds'] as num?)?.toInt() ?? 0,
+        maintCount: (json['maintCount'] as num?)?.toInt() ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
         'usageRecordCount': usageRecordCount,
         'totalQuantity': totalQuantity,
         'activeMoldCount': activeMoldCount,
+        'maintCount': maintCount,
       };
 }

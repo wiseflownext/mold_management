@@ -13,8 +13,16 @@ export class AuthController {
   @Post('login')
   @Throttle({ default: { ttl: 60000, limit: 5 } })
   async login(@Body() dto: LoginDto, @Req() req: any) {
-    const result = await this.authService.login(dto.username, dto.password);
-    this.audit.log({ userId: result.user.id, userName: result.user.name || dto.username, action: 'LOGIN', targetType: 'auth', detail: '登录', ip: req.ip }).catch(() => {});
+    const result = await this.authService.login(dto.companyCode, dto.username, dto.password);
+    this.audit.log({
+      companyId: result.user.companyId,
+      userId: result.user.id,
+      userName: result.user.name || dto.username,
+      action: 'LOGIN',
+      targetType: 'auth',
+      detail: '登录',
+      ip: req.ip,
+    }).catch(() => {});
     return result;
   }
 

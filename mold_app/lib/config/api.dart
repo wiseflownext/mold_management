@@ -1,7 +1,11 @@
 class ApiConfig {
   ApiConfig._();
 
-  static const String baseUrl = 'http://121.40.172.33:8088/api';
+  static const bool _isDev = false;
+
+  static const String baseUrl = _isDev
+      ? 'http://121.40.172.33:8089/api'
+      : 'http://121.40.172.33:8088/api';
   static const Duration timeout = Duration(seconds: 15);
 
   static const String authLogin = '/auth/login';

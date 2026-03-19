@@ -16,10 +16,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   final _auth = AuthService.instance;
 
-  Future<void> login(String username, String password) async {
+  Future<void> login(String companyCode, String username, String password) async {
     state = AuthState(isLoading: true);
     try {
-      final res = await _auth.login(username, password);
+      final res = await _auth.login(companyCode, username, password);
       state = AuthState(user: res.user);
     } catch (_) {
       state = AuthState();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../config/theme.dart';
 import '../../providers/auth_provider.dart';
+import '../../services/auth_service.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +12,7 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
+  final _companyCodeCtrl = TextEditingController();
   final _usernameCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   bool _obscure = true;
@@ -18,17 +20,32 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   String? _error;
 
   @override
+  void initState() {
+    super.initState();
+    _loadSavedCompanyCode();
+  }
+
+  Future<void> _loadSavedCompanyCode() async {
+    final code = await AuthService.instance.getStoredCompanyCode();
+    if (code != null && code.isNotEmpty && mounted) {
+      _companyCodeCtrl.text = code;
+    }
+  }
+
+  @override
   void dispose() {
+    _companyCodeCtrl.dispose();
     _usernameCtrl.dispose();
     _passwordCtrl.dispose();
     super.dispose();
   }
 
   Future<void> _login() async {
+    final c = _companyCodeCtrl.text.trim();
     final u = _usernameCtrl.text.trim();
     final p = _passwordCtrl.text;
-    if (u.isEmpty || p.isEmpty) {
-      setState(() => _error = '请输入账号和密码');
+    if (c.isEmpty || u.isEmpty || p.isEmpty) {
+      setState(() => _error = '请输入公司编码、账号和密码');
       return;
     }
     setState(() {
@@ -36,9 +53,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       _error = null;
     });
     try {
-      await ref.read(authStateProvider.notifier).login(u, p);
+      await ref.read(authStateProvider.notifier).login(c, u, p);
     } catch (e) {
-      setState(() => _error = '登录失败，请检查账号密码');
+      setState(() => _error = '登录失败，请检查公司编码、账号或密码');
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -134,6 +151,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       ),
                       const SizedBox(height: 20),
                       TextField(
+                        controller: _companyCodeCtrl,
+                        decoration: _inputDeco('请输入公司编码', Icons.business_outlined),
+                        textInputAction: TextInputAction.next,
+                      ),
+                      const SizedBox(height: 14),
+                      TextField(
                         controller: _usernameCtrl,
                         decoration: _inputDeco('请输入账号', Icons.person_outline),
                         textInputAction: TextInputAction.next,
@@ -213,7 +236,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
                 const SizedBox(height: 36),
                 const Text(
-                  'v2.1.0 · 模具管理系统',
+                  'v3.0.0 · 模具管理系统',
                   style: TextStyle(fontSize: 12, color: Color(0xFF9CA3AF)),
                 ),
               ],

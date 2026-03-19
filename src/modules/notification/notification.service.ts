@@ -39,25 +39,31 @@ export class NotificationService {
     return this.prisma.notification.count({ where: { userId, isRead: false } });
   }
 
-  async createForAllAdmins(data: { type: any; title: string; message: string; moldId?: number }) {
-    const admins = await this.prisma.user.findMany({ where: { role: 'admin' }, select: { id: true } });
+  async createForAllAdmins(companyId: number, data: { type: any; title: string; message: string; moldId?: number }) {
+    const admins = await this.prisma.user.findMany({
+      where: { role: 'admin', companyId },
+      select: { id: true },
+    });
     if (!admins.length) return;
     await this.prisma.notification.createMany({
-      data: admins.map((a) => ({ userId: a.id, ...data })),
+      data: admins.map((a) => ({ companyId, userId: a.id, ...data })),
     });
   }
 
-  async createForMoldOperators(moldId: number, data: { type: any; title: string; message: string }) {
+  async createForMoldOperators(companyId: number, moldId: number, data: { type: any; title: string; message: string }) {
     const operators = await this.prisma.usageRecord.findMany({
-      where: { moldId },
+      where: { moldId, companyId },
       select: { operatorId: true },
       distinct: ['operatorId'],
     });
-    const adminIds = (await this.prisma.user.findMany({ where: { role: 'admin' }, select: { id: true } })).map(a => a.id);
+    const adminIds = (await this.prisma.user.findMany({
+      where: { role: 'admin', companyId },
+      select: { id: true },
+    })).map(a => a.id);
     const opIds = operators.map(o => o.operatorId).filter(id => !adminIds.includes(id));
     if (!opIds.length) return;
     await this.prisma.notification.createMany({
-      data: opIds.map(uid => ({ userId: uid, moldId, ...data })),
+      data: opIds.map(uid => ({ companyId, userId: uid, moldId, ...data })),
     });
   }
 }

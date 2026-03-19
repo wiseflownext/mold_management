@@ -7,11 +7,15 @@ export class MoldService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateMoldDto) {
-    const exists = await this.prisma.mold.findUnique({ where: { moldNumber: dto.moldNumber } });
+    const companyId = this.prisma.requireCompanyId();
+    const exists = await this.prisma.mold.findFirst({
+      where: { companyId, moldNumber: dto.moldNumber },
+    });
     if (exists) throw new ConflictException('模具编号已存在');
 
     return this.prisma.mold.create({
       data: {
+        companyId,
         moldNumber: dto.moldNumber,
         type: dto.type as any,
         workshopId: dto.workshopId,
@@ -29,8 +33,9 @@ export class MoldService {
   }
 
   async findAll(query: QueryMoldDto) {
+    const companyId = this.prisma.requireCompanyId();
     const { keyword, status, type, workshopId, page = 1, pageSize = 20 } = query;
-    const where: any = {};
+    const where: any = { companyId };
     if (keyword) {
       where.OR = [
         { moldNumber: { contains: keyword } },
@@ -59,8 +64,9 @@ export class MoldService {
   }
 
   async findOne(id: number) {
-    const mold = await this.prisma.mold.findUnique({
-      where: { id },
+    const companyId = this.prisma.requireCompanyId();
+    const mold = await this.prisma.mold.findFirst({
+      where: { id, companyId },
       include: {
         products: true,
         workshop: true,
@@ -89,11 +95,14 @@ export class MoldService {
       daysSinceLastMaintenance = Math.floor((Date.now() - new Date(mold.firstUseDate).getTime()) / 86400000);
     }
 
+    const totalMaintCount = await this.prisma.maintenanceRecord.count({ where: { moldId: id } });
+
     return {
       ...mold,
       sinceLastMaintenance: usageAgg._sum.quantity || 0,
       lastMaintenanceDate,
       daysSinceLastMaintenance,
+      totalMaintenanceCount: totalMaintCount,
     };
   }
 
@@ -135,25 +144,29 @@ export class MoldService {
   }
 
   async getStatistics() {
+    const companyId = this.prisma.requireCompanyId();
     const [total, byStatus, byType] = await Promise.all([
-      this.prisma.mold.count(),
-      this.prisma.mold.groupBy({ by: ['status'], _count: true }),
-      this.prisma.mold.groupBy({ by: ['type'], _count: true }),
+      this.prisma.mold.count({ where: { companyId } }),
+      this.prisma.mold.groupBy({ by: ['status'], where: { companyId }, _count: true }),
+      this.prisma.mold.groupBy({ by: ['type'], where: { companyId }, _count: true }),
     ]);
     return { total, byStatus, byType };
   }
 
   async getTodaySummary() {
+    const companyId = this.prisma.requireCompanyId();
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    const dateWhere = { companyId, recordDate: { gte: today, lt: tomorrow } };
+
     const [recordCount, totalProduction, activeMolds] = await Promise.all([
-      this.prisma.usageRecord.count({ where: { recordDate: { gte: today, lt: tomorrow } } }),
-      this.prisma.usageRecord.aggregate({ where: { recordDate: { gte: today, lt: tomorrow } }, _sum: { quantity: true } }),
+      this.prisma.usageRecord.count({ where: dateWhere }),
+      this.prisma.usageRecord.aggregate({ where: dateWhere, _sum: { quantity: true } }),
       this.prisma.usageRecord.findMany({
-        where: { recordDate: { gte: today, lt: tomorrow } },
+        where: dateWhere,
         select: { moldId: true },
         distinct: ['moldId'],
       }),

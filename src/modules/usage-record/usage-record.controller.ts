@@ -17,7 +17,7 @@ export class UsageRecordController {
   async create(@Body() dto: CreateUsageRecordDto, @CurrentUser() user: any, @Req() req: any) {
     const record = await this.service.create(dto, user.id);
     this.reminder.checkSingleMold(dto.moldId).catch(() => {});
-    this.audit.log({ userId: user.id, userName: user.name, action: 'CREATE', targetType: 'usage_record', targetId: record.id, detail: `模具${record.mold?.moldNumber} 产品${dto.product} 数量${dto.quantity}`, ip: req.ip }).catch(() => {});
+    this.audit.log({ companyId: user.companyId, userId: user.id, userName: user.name, action: 'CREATE', targetType: 'usage_record', targetId: record.id, detail: `模具${record.mold?.moldNumber} 产品${dto.product} 数量${dto.quantity}`, ip: req.ip }).catch(() => {});
     return record;
   }
 
@@ -30,6 +30,6 @@ export class UsageRecordController {
   @Roles('admin')
   async remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: any, @Req() req: any) {
     await this.service.remove(id);
-    this.audit.log({ userId: user.id, userName: user.name, action: 'DELETE', targetType: 'usage_record', targetId: id, ip: req.ip });
+    this.audit.log({ companyId: user.companyId, userId: user.id, userName: user.name, action: 'DELETE', targetType: 'usage_record', targetId: id, ip: req.ip });
   }
 }
