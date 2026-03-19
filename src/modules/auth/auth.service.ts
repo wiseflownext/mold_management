@@ -11,6 +11,10 @@ export class AuthService {
   ) {}
 
   async login(companyCode: string, username: string, password: string) {
+    if (companyCode === 'SUPER') {
+      return this.loginSuperAdmin(username, password);
+    }
+
     const company = await this.prisma.company.findUnique({
       where: { code: companyCode },
     });
@@ -41,6 +45,33 @@ export class AuthService {
         companyName: company.name,
         workshop: user.workshop?.name,
         workshopId: user.workshopId,
+      },
+    };
+  }
+
+  private async loginSuperAdmin(username: string, password: string) {
+    const user = await this.prisma.user.findFirst({
+      where: { username, role: 'super_admin' },
+    });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      throw new UnauthorizedException('用户名或密码错误');
+    }
+
+    await this.prisma.user.update({ where: { id: user.id }, data: { lastLogin: new Date() } });
+
+    const payload = { sub: user.id, role: 'super_admin', companyId: 0 };
+    return {
+      accessToken: this.jwt.sign(payload),
+      refreshToken: this.jwt.sign(payload, { expiresIn: process.env.JWT_REFRESH_EXPIRES || '7d' }),
+      user: {
+        id: user.id,
+        username: user.username,
+        name: user.name,
+        role: 'super_admin',
+        companyId: 0,
+        companyName: '平台管理',
+        workshop: null,
+        workshopId: null,
       },
     };
   }

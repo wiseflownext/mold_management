@@ -48,6 +48,19 @@ export class CompanyService {
     return this.prisma.company.update({ where: { id }, data: dto });
   }
 
+  async remove(id: number) {
+    const company = await this.findOne(id);
+    const counts = await Promise.all([
+      this.prisma.user.count({ where: { companyId: id } }),
+      this.prisma.mold.count({ where: { companyId: id } }),
+    ]);
+    if (counts[0] > 0 || counts[1] > 0) {
+      throw new ConflictException('该公司下有用户或模具数据，无法删除');
+    }
+    await this.prisma.reminderSetting.deleteMany({ where: { companyId: id } });
+    return this.prisma.company.delete({ where: { id } });
+  }
+
   async initAdmin(companyId: number, dto: InitAdminDto) {
     await this.findOne(companyId);
     const exists = await this.prisma.user.findFirst({
